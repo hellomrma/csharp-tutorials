@@ -1,3 +1,14 @@
+---
+title: 반복문 (Loop)
+titleEn: Loop
+slugEn: 16-loop
+description: C#의 반복문(while, for, foreach)을 학습합니다. 코드를 반복 실행하고 배열과 리스트를 순회하는 방법을 이해합니다.
+descriptionEn: Learn about loops in C# (while, for, foreach). Understand how to repeat code and iterate through arrays and lists.
+category: Unity C# 기초
+categoryEn: Unity C# Basics
+order: 16
+---
+
 # 16. 반복문 (Loop)
 
 ## 반복문이란?

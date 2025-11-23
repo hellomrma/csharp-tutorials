@@ -1,7 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { useLanguage } from './LanguageProvider';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
   
   return (
     <footer className="site-footer">
@@ -9,13 +13,13 @@ export default function Footer() {
         <div className="footer-content">
           <div className="footer-main">
             <p className="footer-text">
-              © {currentYear} <Link href="/" className="footer-link">C# 프로그래밍 튜토리얼</Link>
+              © {currentYear} <Link href="/" className="footer-link">{t.siteName}</Link>
             </p>
           </div>
           <div className="footer-divider"></div>
           <div className="footer-copyright">
             <p className="footer-copyright-text">
-              © {currentYear} hellomrma. All rights reserved.
+              © {currentYear} hellomrma. {t.allRightsReserved}
             </p>
           </div>
           <div className="footer-contacts">
@@ -37,7 +41,7 @@ export default function Footer() {
           </div>
           <div className="footer-divider"></div>
           <p className="footer-subtext">
-            Unity와 C#을 체계적으로 학습할 수 있는 온라인 튜토리얼
+            {t.footerDescription}
           </p>
         </div>
       </div>

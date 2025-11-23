@@ -1,3 +1,14 @@
+---
+title: 열거형 (enum)
+titleEn: Enumeration (enum)
+slugEn: 04-enumeration-enum
+description: C#의 enum을 학습합니다. 관련된 상수들을 그룹으로 묶어서 관리하고 Unity Inspector에서 사용하는 방법을 이해합니다.
+descriptionEn: Learn about enums in C#. Understand how to group related constants together and use them in Unity Inspector.
+category: Unity C# 기초
+categoryEn: Unity C# Basics
+order: 4
+---
+
 # 4. 열거형 (enum)
 
 ## enum이란?

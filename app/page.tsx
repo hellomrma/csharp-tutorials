@@ -1,6 +1,7 @@
-import Link from 'next/link';
 import { getAllTutorials } from '@/lib/markdown';
+import { getLocale } from '@/lib/cookies';
 import type { Metadata } from 'next';
+import MainPageContent from './components/MainPageContent';
 
 export const metadata: Metadata = {
   title: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
@@ -16,8 +17,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  const tutorials = getAllTutorials();
+export default async function Home() {
+  const locale = await getLocale();
+  const tutorials = getAllTutorials(locale);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 
@@ -25,11 +27,13 @@ export default function Home() {
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'C# 프로그래밍 튜토리얼',
-    alternateName: 'C# Programming Tutorial',
-    description: 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트',
+    name: locale === 'en' ? 'Unity C# Tutorial' : 'Unity C# 튜토리얼',
+    alternateName: locale === 'en' ? 'Unity C# Tutorial' : 'Unity C# 튜토리얼',
+    description: locale === 'en'
+      ? 'Online tutorial website to systematically learn Unity and C# programming language'
+      : 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트',
     url: siteUrl,
-    inLanguage: 'ko-KR',
+    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
     about: {
       '@type': 'Thing',
       name: 'C# Programming Education',
@@ -49,10 +53,12 @@ export default function Home() {
   const collectionJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'C# 프로그래밍 튜토리얼 목록',
-    description: 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 튜토리얼 목록',
+    name: locale === 'en' ? 'Unity C# Tutorial List' : 'Unity C# 튜토리얼 목록',
+    description: locale === 'en'
+      ? 'List of tutorials to systematically learn Unity and C# programming language'
+      : 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 튜토리얼 목록',
     url: siteUrl,
-    inLanguage: 'ko-KR',
+    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: tutorials.length,
@@ -63,7 +69,9 @@ export default function Home() {
           '@type': 'Course',
           '@id': `${siteUrl}/tutorials/${tutorial.slug}`,
           name: tutorial.title,
-          description: `${tutorial.title} - C# 프로그래밍 튜토리얼`,
+          description: locale === 'en' 
+            ? `${tutorial.title} - Unity C# Tutorial`
+            : `${tutorial.title} - Unity C# 튜토리얼`,
           url: `${siteUrl}/tutorials/${tutorial.slug}`,
         },
       })),
@@ -74,8 +82,10 @@ export default function Home() {
   const courseCollectionJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Course',
-    name: 'C# 프로그래밍 마스터하기',
-    description: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배우는 종합 교육 과정',
+    name: locale === 'en' ? 'Master Unity C# Programming' : 'Unity C# 마스터하기',
+    description: locale === 'en'
+      ? 'Comprehensive course to learn everything about C# programming step by step, from Unity game development to real-world applications'
+      : 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배우는 종합 교육 과정',
     provider: {
       '@type': 'Organization',
       name: 'C# Tutorials',
@@ -83,7 +93,7 @@ export default function Home() {
     },
     courseCode: 'C#-MASTER',
     educationalLevel: 'Beginner',
-    inLanguage: 'ko-KR',
+    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
     url: siteUrl,
     teaches: 'C# 프로그래밍, Unity 게임 개발',
     hasCourseInstance: {
@@ -117,57 +127,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseCollectionJsonLd) }}
       />
-      <div className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
-        <div className="main-header">
-          <h1 className="main-title">
-            <span className="main-title-main">C#</span>
-            <span className="main-title-sub">마스터하기</span>
-            <span className="main-title-en">(Master C# Programming)</span>
-          </h1>
-          <p className="main-subtitle">
-            Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요
-          </p>
-          <p className="main-description">
-            기초 문법부터 고급 개념까지, 실전 예제와 상세한 설명으로 프로그래밍 실력을 한 단계씩 향상시킬 수 있습니다.
-          </p>
-        </div>
-
-        {tutorials.length > 0 ? (
-          <section className="tutorial-list" aria-label="튜토리얼 목록">
-            {tutorials.map((tutorial, index) => (
-              <Link
-                key={tutorial.slug}
-                href={`/tutorials/${tutorial.slug}`}
-                className="tutorial-item"
-                aria-label={`${tutorial.title} 튜토리얼 보기`}
-              >
-                <span className="tutorial-number" aria-hidden="true">
-                  {String(tutorial.order ?? index + 1).padStart(2, '0')}
-                </span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <h2 className="tutorial-title">
-                    <span className="tutorial-title-kr">{tutorial.title}</span>
-                    {tutorial.titleEn && (
-                      <span className="tutorial-title-en">({tutorial.titleEn})</span>
-                    )}
-                  </h2>
-                </div>
-                <svg className="tutorial-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            ))}
-          </section>
-        ) : (
-          <div className="empty-state" role="status" aria-live="polite">
-            <p>아직 튜토리얼이 없습니다</p>
-            <p>
-              <code>content/docs/</code>
-              <span>디렉토리에 MD 파일을 추가하세요</span>
-            </p>
-          </div>
-        )}
-      </div>
+      <MainPageContent tutorials={tutorials} />
     </main>
   );
 }

@@ -1,3 +1,14 @@
+---
+title: 배열 (Array)
+titleEn: Array
+slugEn: 13-array
+description: C#의 배열을 학습합니다. 배열을 선언하고 사용하며 인덱스로 요소에 접근하는 방법을 이해합니다.
+descriptionEn: Learn about arrays in C#. Understand how to declare, use, and access array elements by index.
+category: Unity C# 기초
+categoryEn: Unity C# Basics
+order: 13
+---
+
 # 13. 배열 (Array)
 
 ## 배열이란?

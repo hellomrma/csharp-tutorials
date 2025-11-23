@@ -155,6 +155,41 @@ body {
   }
 }
 
+/* 언어 전환 버튼 */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lang-button {
+  background: transparent;
+  border: none;
+  color: var(--slate-400);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.lang-button:hover {
+  color: var(--slate-200);
+  background: rgba(51, 65, 85, 0.3);
+}
+
+.lang-button.active {
+  color: var(--slate-100);
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.lang-separator {
+  color: var(--slate-600);
+  font-size: 0.875rem;
+}
+
 /* 푸터 */
 .site-footer {
   background: var(--slate-900);

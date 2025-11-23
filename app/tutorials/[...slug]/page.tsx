@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, getAllTutorialSlugs, getAllTutorials } from '@/lib/markdown';
-import Link from 'next/link';
+import { getLocale } from '@/lib/cookies';
 import type { Metadata } from 'next';
+import TutorialPageContent from '@/app/components/TutorialPageContent';
 
 interface PageProps {
   params: Promise<{
@@ -25,17 +26,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
-  const tutorial = await getTutorialBySlug(slugString);
-
+  const locale = await getLocale();
+  const tutorial = await getTutorialBySlug(slugString, locale);
+  
   if (!tutorial) {
     return {
-      title: '페이지를 찾을 수 없습니다',
+      title: locale === 'en' ? 'Page Not Found' : '페이지를 찾을 수 없습니다',
     };
   }
 
   const title = tutorial.meta.title;
-  const seoTitle = `${title} | C# 프로그래밍 튜토리얼`;
-  const description = tutorial.meta.description || `${title} - C# 프로그래밍 튜토리얼. Unity와 C#을 체계적으로 학습할 수 있는 튜토리얼입니다.`;
+  const seoTitle = locale === 'en' 
+    ? `${title} | Unity C# Tutorial`
+    : `${title} | Unity C# 튜토리얼`;
+  const description = tutorial.meta.description || (locale === 'en'
+    ? `${title} - Learn Unity and C# programming systematically.`
+    : `${title} - Unity와 C#을 체계적으로 학습할 수 있는 튜토리얼입니다.`);
   const url = `${siteUrl}/tutorials/${slugString}`;
   const keywords = tutorial.meta.keywords || ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 학습'];
 
@@ -79,17 +85,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function TutorialPage({ params }: PageProps) {
   const { slug } = await params;
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
-  const tutorial = await getTutorialBySlug(slugString);
+  const locale = await getLocale();
+  const tutorial = await getTutorialBySlug(slugString, locale);
 
   if (!tutorial) {
     notFound();
   }
 
+  // 리다이렉트는 클라이언트 사이드에서 처리하도록 함
+  // 서버 사이드 리다이렉트는 무한 루프를 일으킬 수 있으므로 제거
+  // LanguageSwitcher에서 언어 변경 시 router.push로 처리
+
   // 이전/다음 튜토리얼 찾기
-  const allTutorials = getAllTutorials();
+  const allTutorials = getAllTutorials(locale);
   
-  // slug 비교: tutorial.meta.slug는 항상 'docs/...' 형식으로 정규화됨
-  // 한글 파일명의 경우 URL 인코딩 차이를 고려하여 정규화된 slug로 비교
+  // slug 비교: 언어에 따라 적절한 slug 사용
   const normalizeSlug = (s: string) => {
     // 'docs/' 접두사 확인 및 정규화
     const normalized = s.startsWith('docs/') ? s : `docs/${s}`;
@@ -101,7 +111,11 @@ export default async function TutorialPage({ params }: PageProps) {
     }
   };
   
+  // 현재 튜토리얼의 slug (언어에 따라)
   const currentSlug = normalizeSlug(tutorial.meta.slug);
+  
+  // allTutorials에서 현재 튜토리얼 찾기
+  // slug 또는 order로 매칭
   let currentIndex = allTutorials.findIndex((t) => {
     const tutorialSlug = normalizeSlug(t.slug);
     return tutorialSlug === currentSlug;
@@ -125,7 +139,9 @@ export default async function TutorialPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: tutorial.meta.title,
-    description: tutorial.meta.description || `${tutorial.meta.title} - C# 프로그래밍 튜토리얼`,
+    description: tutorial.meta.description || (locale === 'en'
+      ? `${tutorial.meta.title} - Unity C# Tutorial`
+      : `${tutorial.meta.title} - Unity C# 튜토리얼`),
     author: {
       '@type': 'Organization',
       name: 'C# Tutorials',
@@ -146,8 +162,10 @@ export default async function TutorialPage({ params }: PageProps) {
       '@id': `${siteUrl}/tutorials/${slugString}`,
     },
     articleSection: tutorial.meta.category || 'Unity C# 기초',
-    keywords: tutorial.meta.keywords || ['C#', 'CSharp', '프로그래밍', '튜토리얼'],
-    inLanguage: 'ko-KR',
+    keywords: tutorial.meta.keywords || (locale === 'en'
+      ? ['C#', 'CSharp', 'Programming', 'Tutorial', 'Unity']
+      : ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity']),
+    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
     about: {
       '@type': 'Thing',
       name: 'C# Programming',
@@ -158,11 +176,26 @@ export default async function TutorialPage({ params }: PageProps) {
   };
 
   // 구조화된 데이터 (JSON-LD) - Course (GEO 최적화)
-  const courseJsonLd: any = {
+  const courseJsonLd: {
+    '@context': string;
+    '@type': string;
+    name: string;
+    description: string;
+    provider: { '@type': string; name: string; url: string };
+    courseCode: string;
+    educationalLevel: string;
+    inLanguage: string;
+    url: string;
+    teaches: string;
+    hasCourseInstance: { '@type': string; courseMode: string; instructor: { '@type': string; name: string } };
+    coursePrerequisites?: { '@type': string; name: string; url: string };
+  } = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: tutorial.meta.title,
-    description: tutorial.meta.description || `${tutorial.meta.title} - C# 프로그래밍 튜토리얼`,
+    description: tutorial.meta.description || (locale === 'en'
+      ? `${tutorial.meta.title} - Unity C# Tutorial`
+      : `${tutorial.meta.title} - Unity C# 튜토리얼`),
     provider: {
       '@type': 'Organization',
       name: 'C# Tutorials',
@@ -170,7 +203,7 @@ export default async function TutorialPage({ params }: PageProps) {
     },
     courseCode: `C#-${String(tutorial.meta.order || 0).padStart(2, '0')}`,
     educationalLevel: 'Beginner',
-    inLanguage: 'ko-KR',
+    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
     url: `${siteUrl}/tutorials/${slugString}`,
     teaches: 'C# 프로그래밍',
     hasCourseInstance: {
@@ -226,94 +259,11 @@ export default async function TutorialPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div className="detail-container">
-        <nav style={{ marginBottom: '2rem' }} aria-label="Breadcrumb">
-          <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <li>
-              <Link href="/" className="nav-link" aria-label="홈으로 돌아가기">
-                <svg className="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span>홈으로 돌아가기</span>
-              </Link>
-            </li>
-          </ol>
-        </nav>
-
-        <article className="article-container" itemScope itemType="https://schema.org/Article">
-          <header className="article-header">
-            <div className="article-meta">
-              <span className="article-number" aria-label="튜토리얼 번호">
-                {String(tutorial.meta.order || 0).padStart(2, '0')}
-              </span>
-              {tutorial.meta.category && (
-                <span className="article-category" itemProp="articleSection">{tutorial.meta.category}</span>
-              )}
-            </div>
-            <h1 className="article-title" itemProp="headline">{tutorial.meta.title}</h1>
-            {tutorial.meta.description && (
-              <p className="article-description" itemProp="description" style={{ 
-                marginTop: '0.75rem', 
-                color: 'var(--slate-300)', 
-                fontSize: '0.9375rem',
-                lineHeight: '1.6'
-              }}>
-                {tutorial.meta.description}
-              </p>
-            )}
-            {tutorial.meta.date && (
-              <time dateTime={tutorial.meta.date} itemProp="datePublished" style={{ display: 'none' }}>
-                {tutorial.meta.date}
-              </time>
-            )}
-          </header>
-
-          <div
-            className="markdown-content"
-            itemProp="articleBody"
-            dangerouslySetInnerHTML={{ __html: tutorial.htmlContent }}
-          />
-        </article>
-
-        <nav className="nav-footer" aria-label="이전/다음 튜토리얼 네비게이션">
-          {prevTutorial ? (
-            <Link href={`/tutorials/${prevTutorial.slug}`} className="nav-card" rel="prev" aria-label={`이전 튜토리얼: ${prevTutorial.title}`}>
-              <svg className="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <div>
-                <div className="nav-card-label">이전</div>
-                <p className="nav-card-title">{prevTutorial.title}</p>
-              </div>
-            </Link>
-          ) : (
-            <div></div>
-          )}
-
-          {nextTutorial ? (
-            <Link href={`/tutorials/${nextTutorial.slug}`} className="nav-card nav-card-right" rel="next" aria-label={`다음 튜토리얼: ${nextTutorial.title}`}>
-              <div>
-                <div className="nav-card-label">다음</div>
-                <p className="nav-card-title">{nextTutorial.title}</p>
-              </div>
-              <svg className="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          ) : (
-            <div></div>
-          )}
-        </nav>
-
-        <div className="back-link">
-          <Link href="/">
-            <svg className="back-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <span>튜토리얼 목록으로 돌아가기</span>
-          </Link>
-        </div>
-      </div>
+      <TutorialPageContent 
+        tutorial={{ meta: tutorial.meta, content: tutorial.htmlContent }}
+        prevTutorial={prevTutorial}
+        nextTutorial={nextTutorial}
+      />
     </div>
   );
 }

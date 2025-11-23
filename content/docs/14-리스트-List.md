@@ -1,3 +1,14 @@
+---
+title: 리스트 (List)
+titleEn: List
+slugEn: 14-list
+description: C#의 List를 학습합니다. 크기를 자유롭게 늘리거나 줄일 수 있는 동적 배열을 사용하는 방법을 이해하며, Unity에서 자주 사용하는 자료구조를 학습합니다.
+descriptionEn: Learn about Lists in C#. Understand how to use dynamic arrays that can grow or shrink in size, commonly used in Unity.
+category: Unity C# 기초
+categoryEn: Unity C# Basics
+order: 14
+---
+
 # 14. 리스트 (List)
 
 ## 리스트란?

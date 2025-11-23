@@ -1,3 +1,14 @@
+---
+title: 상수와 switch-case 문
+titleEn: Constants and switch-case Statement
+slugEn: 03-constants-and-switch-case
+description: C#의 상수(const)와 switch-case 문을 학습합니다. Input.GetKeyDown()을 사용한 키보드 입력 감지 방법을 이해합니다.
+descriptionEn: Learn about constants (const) and the switch-case statement in C#. Understand how to use Input.GetKeyDown() for keyboard input detection.
+category: Unity C# 기초
+categoryEn: Unity C# Basics
+order: 3
+---
+
 # 3. 상수와 switch-case 문
 
 ## 상수 (const)

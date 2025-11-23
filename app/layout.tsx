@@ -6,15 +6,15 @@ import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 const siteName = 'C# 프로그래밍 튜토리얼';
 const defaultDescription = 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트입니다. 실전 예제와 상세한 설명으로 C# 기초부터 고급까지 마스터하세요.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteName,
-    template: `%s | ${siteName}`,
+    default: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
+    template: `%s`,
   },
   description: defaultDescription,
   keywords: ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 기초', 'C# 학습', '프로그래밍 강의'],

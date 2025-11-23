@@ -34,16 +34,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = tutorial.meta.title;
+  const seoTitle = `${title} | C# 프로그래밍 튜토리얼`;
   const description = tutorial.meta.description || `${title} - C# 프로그래밍 튜토리얼. Unity와 C#을 체계적으로 학습할 수 있는 튜토리얼입니다.`;
   const url = `${siteUrl}/tutorials/${slugString}`;
   const keywords = tutorial.meta.keywords || ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 학습'];
 
   return {
-    title,
+    title: seoTitle,
     description,
-    keywords: [...keywords, 'C# 기초', '프로그래밍 강의', '코딩 학습'],
+    keywords: [...keywords, 'C# 기초', '프로그래밍 강의', '코딩 학습', 'Unity C#'],
     openGraph: {
-      title,
+      title: seoTitle,
       description,
       url,
       type: 'article',
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: seoTitle,
       description,
       images: ['/og-image.png'],
     },

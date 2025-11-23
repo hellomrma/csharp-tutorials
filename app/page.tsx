@@ -3,20 +3,23 @@ import { getAllTutorials } from '@/lib/markdown';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '홈',
+  title: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
   description: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요. 기초 문법부터 고급 개념까지, 실전 예제와 상세한 설명으로 프로그래밍 실력을 향상시킬 수 있습니다.',
-  keywords: ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 기초', 'C# 학습', '프로그래밍 강의', '코딩 학습', 'C# 마스터'],
+  keywords: ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 기초', 'C# 학습', '프로그래밍 강의', '코딩 학습', 'C# 마스터', 'Unity C#', 'C# 튜토리얼'],
   openGraph: {
-    title: 'C# 프로그래밍 마스터하기',
+    title: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
     description: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요.',
     type: 'website',
+  },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app',
   },
 };
 
 export default function Home() {
   const tutorials = getAllTutorials();
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 
   // 구조화된 데이터 (JSON-LD) - 웹사이트 정보
   const websiteJsonLd = {

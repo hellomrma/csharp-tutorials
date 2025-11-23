@@ -9,7 +9,7 @@ interface PageProps {
   }>;
 }
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 
 export async function generateStaticParams() {
   const slugs = getAllTutorialSlugs();

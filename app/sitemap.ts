@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllTutorials } from '@/lib/markdown';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const tutorials = getAllTutorials();

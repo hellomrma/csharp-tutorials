@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/gh/webfontworld/d2coding/D2Coding.css');
+
 :root {
   --background: #0f172a;
   --foreground: #e2e8f0;
@@ -908,6 +910,16 @@ html {
 .hljs {
   background: #0d1117;
   color: #c9d1d9;
+}
+
+/* D2Coding 폰트 적용 - C# 코드 블록 */
+div.hljs.language-csharp,
+.hljs.language-csharp,
+code.hljs.language-csharp,
+pre code.hljs.language-csharp,
+.markdown-content pre code.hljs.language-csharp,
+.markdown-content code.hljs.language-csharp {
+  font-family: 'D2Coding', 'D2CodingLigature', monospace;
 }
 
 .hljs-keyword { color: #ff7b72; }

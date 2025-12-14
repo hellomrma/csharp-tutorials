@@ -108,21 +108,102 @@ void Start()
 
 ## 실전 활용 예시
 
+**예시 1: 플레이어 인벤토리 (동적으로 아이템 추가/제거)**
 ```csharp
-// 플레이어 인벤토리
-List<string> inventory = new List<string>();
-inventory.Add("검");
-inventory.Add("방패");
-inventory.Add("물약");
+public class Inventory : MonoBehaviour
+{
+    List<string> inventory = new List<string>();
+    
+    void Start()
+    {
+        // 아이템 추가
+        inventory.Add("검");
+        inventory.Add("방패");
+        inventory.Add("물약");
+        inventory.Add("갑옷");
+        
+        Debug.Log("인벤토리 아이템 수: " + inventory.Count);  // 4
+        
+        // 아이템 제거
+        inventory.Remove("물약");  // "물약" 제거
+        Debug.Log("인벤토리 아이템 수: " + inventory.Count);  // 3
+        
+        // 모든 아이템 출력
+        foreach (string item in inventory)
+        {
+            Debug.Log("아이템: " + item);
+        }
+    }
+}
+```
 
-// 아이템 제거
-inventory.Remove("물약");
+**예시 2: 적 리스트 관리 (동적으로 적 추가/제거)**
+```csharp
+public class EnemyManager : MonoBehaviour
+{
+    List<GameObject> enemies = new List<GameObject>();
+    
+    void SpawnEnemy(GameObject enemyPrefab)
+    {
+        GameObject newEnemy = Instantiate(enemyPrefab);
+        enemies.Add(newEnemy);  // 리스트에 추가
+    }
+    
+    void KillEnemy(GameObject enemy)
+    {
+        enemies.Remove(enemy);  // 리스트에서 제거
+        Destroy(enemy);
+    }
+    
+    void Update()
+    {
+        // 모든 적이 죽었는지 확인
+        if (enemies.Count == 0)
+        {
+            Debug.Log("모든 적을 처치했습니다!");
+        }
+    }
+}
+```
 
-// 점수 리스트
-List<int> scores = new List<int>();
-scores.Add(100);
-scores.Add(200);
-scores.Add(150);
+**예시 3: 점수 리스트 (랭킹 시스템)**
+```csharp
+public class ScoreManager : MonoBehaviour
+{
+    List<int> scores = new List<int>();
+    
+    void AddScore(int newScore)
+    {
+        scores.Add(newScore);
+        scores.Sort();  // 정렬
+        scores.Reverse();  // 내림차순으로 변경
+        
+        // 최고 점수 10개만 유지
+        if (scores.Count > 10)
+        {
+            scores.RemoveAt(10);  // 11번째부터 제거
+        }
+    }
+}
+```
+
+**예시 4: 수집 아이템 리스트**
+```csharp
+public class ItemCollector : MonoBehaviour
+{
+    List<GameObject> collectedItems = new List<GameObject>();
+    
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            collectedItems.Add(other.gameObject);  // 수집한 아이템 추가
+            other.gameObject.SetActive(false);  // 아이템 숨기기
+            
+            Debug.Log("수집한 아이템 수: " + collectedItems.Count);
+        }
+    }
+}
 ```
 
 ---

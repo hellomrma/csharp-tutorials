@@ -189,64 +189,153 @@ void Start()
 
 ## 실전 활용 예시
 
-### 예시 1: 콜백 함수
+### 예시 1: 게임 이벤트 콜백
 
 ```csharp
-public delegate void OnCompleteDelegate();
+public delegate void OnEnemyKilledDelegate(string enemyName);
+public delegate void OnPlayerLevelUpDelegate(int newLevel);
 
-public class TaskManager : MonoBehaviour
+public class GameEventManager : MonoBehaviour
 {
-    public OnCompleteDelegate OnTaskComplete;
+    public OnEnemyKilledDelegate OnEnemyKilled;
+    public OnPlayerLevelUpDelegate OnPlayerLevelUp;
     
     void Start()
     {
-        OnTaskComplete += ShowMessage;
-        OnTaskComplete += SaveProgress;
+        // 여러 함수를 연결 (멀티캐스트)
+        OnEnemyKilled += UpdateScore;
+        OnEnemyKilled += PlayKillSound;
+        OnEnemyKilled += CheckQuestProgress;
         
-        // 작업 완료 시
-        CompleteTask();
+        OnPlayerLevelUp += ShowLevelUpUI;
+        OnPlayerLevelUp += UnlockNewAbilities;
     }
     
-    void CompleteTask()
+    // 적 처치 시 호출
+    public void EnemyKilled(string enemyName)
     {
-        // 작업 완료 로직...
-        
-        // 콜백 호출
-        OnTaskComplete?.Invoke();
+        OnEnemyKilled?.Invoke(enemyName);
     }
     
-    void ShowMessage()
+    // 레벨업 시 호출
+    public void PlayerLevelUp(int newLevel)
     {
-        Debug.Log("작업이 완료되었습니다!");
+        OnPlayerLevelUp?.Invoke(newLevel);
     }
     
-    void SaveProgress()
+    void UpdateScore(string enemyName)
     {
-        Debug.Log("진행 상황 저장");
+        Debug.Log(enemyName + " 처치! 점수 +10");
+    }
+    
+    void PlayKillSound(string enemyName)
+    {
+        Debug.Log("적 처치 사운드 재생");
+    }
+    
+    void CheckQuestProgress(string enemyName)
+    {
+        Debug.Log("퀘스트 진행도 확인");
+    }
+    
+    void ShowLevelUpUI(int newLevel)
+    {
+        Debug.Log("레벨업 UI 표시: 레벨 " + newLevel);
+    }
+    
+    void UnlockNewAbilities(int newLevel)
+    {
+        Debug.Log("새로운 능력 해제");
     }
 }
 ```
 
-### 예시 2: 조건부 함수 실행
+### 예시 2: 조건부 함수 실행 (게임 로직)
 
 ```csharp
-public delegate bool ConditionDelegate(int value);
+public delegate bool CanUseItemDelegate(int playerLevel, int itemLevel);
 
-public class ConditionalExample : MonoBehaviour
+public class ItemSystem : MonoBehaviour
 {
     void Start()
     {
-        ConditionDelegate check = IsPositive;
+        CanUseItemDelegate canUse = CheckItemLevel;
         
-        if (check(10))
+        int playerLevel = 10;
+        int itemLevel = 15;
+        
+        if (canUse(playerLevel, itemLevel))
         {
-            Debug.Log("양수입니다");
+            Debug.Log("아이템 사용 가능!");
+        }
+        else
+        {
+            Debug.Log("레벨이 부족합니다!");
         }
     }
     
-    bool IsPositive(int value)
+    bool CheckItemLevel(int playerLevel, int itemLevel)
     {
-        return value > 0;
+        return playerLevel >= itemLevel;
+    }
+}
+
+// 다른 조건도 사용 가능
+public class CombatSystem : MonoBehaviour
+{
+    public delegate bool CanAttackDelegate(int hp, int mana);
+    
+    void Start()
+    {
+        CanAttackDelegate canAttack = (hp, mana) => hp > 0 && mana >= 10;
+        
+        if (canAttack(50, 20))
+        {
+            Debug.Log("공격 가능!");
+        }
+    }
+}
+```
+
+### 예시 3: 무기 공격 패턴 (델리게이트로 다양한 공격 방식)
+
+```csharp
+public delegate void AttackPatternDelegate();
+
+public class Weapon : MonoBehaviour
+{
+    public AttackPatternDelegate attackPattern;
+    
+    void Start()
+    {
+        // 무기 타입에 따라 다른 공격 패턴 설정
+        attackPattern = NormalAttack;
+        // 또는
+        // attackPattern = ComboAttack;
+        // attackPattern = ChargeAttack;
+    }
+    
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            attackPattern?.Invoke();
+        }
+    }
+    
+    void NormalAttack()
+    {
+        Debug.Log("일반 공격!");
+    }
+    
+    void ComboAttack()
+    {
+        Debug.Log("콤보 공격!");
+    }
+    
+    void ChargeAttack()
+    {
+        Debug.Log("차지 공격!");
     }
 }
 ```

@@ -58,16 +58,84 @@ void Start()
 
 ## 실전 활용 예시
 
+**예시 1: 플레이어 점수 배열**
 ```csharp
-// 플레이어 점수 배열
-int[] playerScores = new int[5];
-playerScores[0] = 100;
-playerScores[1] = 200;
-playerScores[2] = 150;
+public class ScoreManager : MonoBehaviour
+{
+    // 최고 점수 5개 저장
+    int[] topScores = new int[5];
+    
+    void Start()
+    {
+        topScores[0] = 1000;
+        topScores[1] = 850;
+        topScores[2] = 720;
+        topScores[3] = 600;
+        topScores[4] = 500;
+    }
+}
+```
 
-// 아이템 이름 배열
-string[] itemNames = {"검", "방패", "물약", "갑옷"};
-Debug.Log(itemNames[0]);  // "검" 출력
+**예시 2: 아이템 이름 배열**
+```csharp
+public class Inventory : MonoBehaviour
+{
+    // 인벤토리 슬롯 (최대 10개)
+    string[] inventory = new string[10];
+    
+    void Start()
+    {
+        inventory[0] = "검";
+        inventory[1] = "방패";
+        inventory[2] = "물약";
+        
+        Debug.Log("첫 번째 아이템: " + inventory[0]);  // "검" 출력
+    }
+}
+```
+
+**예시 3: 적 스폰 위치 배열**
+```csharp
+public class EnemySpawner : MonoBehaviour
+{
+    // 적이 스폰될 위치들 (고정된 5개 위치)
+    Vector3[] spawnPoints = new Vector3[5];
+    
+    void Start()
+    {
+        spawnPoints[0] = new Vector3(0, 0, 0);
+        spawnPoints[1] = new Vector3(10, 0, 0);
+        spawnPoints[2] = new Vector3(20, 0, 0);
+        spawnPoints[3] = new Vector3(0, 0, 10);
+        spawnPoints[4] = new Vector3(10, 0, 10);
+        
+        // 또는 선언과 동시에 초기화
+        Vector3[] quickSpawnPoints = {
+            new Vector3(0, 0, 0),
+            new Vector3(10, 0, 0),
+            new Vector3(20, 0, 0)
+        };
+    }
+}
+```
+
+**예시 4: 무기 데미지 배열**
+```csharp
+public class WeaponManager : MonoBehaviour
+{
+    // 각 무기 타입별 데미지 (고정된 값)
+    int[] weaponDamages = { 10, 15, 20, 25, 30 };
+    
+    // 무기 타입: 0=검, 1=활, 2=지팡이, 3=도끼, 4=창
+    int GetWeaponDamage(int weaponType)
+    {
+        if (weaponType >= 0 && weaponType < weaponDamages.Length)
+        {
+            return weaponDamages[weaponType];
+        }
+        return 0;
+    }
+}
 ```
 
 ---

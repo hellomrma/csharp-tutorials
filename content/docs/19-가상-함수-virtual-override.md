@@ -86,11 +86,27 @@ public class s04 : MonoBehaviour
 
 ### 부모 클래스
 ```csharp
-public class s05_enermy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
+    public int hp = 50;
+    public int damage = 10;
+    
     public virtual void Die() 
     { 
         Debug.Log("적이 죽었습니다.");
+        // 기본 동작: 아이템 드롭, 경험치 지급 등
+        DropItem();
+        GiveExperience(10);
+    }
+    
+    protected virtual void DropItem()
+    {
+        Debug.Log("아이템을 드롭합니다.");
+    }
+    
+    protected virtual void GiveExperience(int exp)
+    {
+        Debug.Log("경험치 " + exp + " 획득!");
     }
 }
 ```
@@ -98,46 +114,92 @@ public class s05_enermy : MonoBehaviour
 ### 자식 클래스들
 ```csharp
 // 고블린
-public class s05_enermy_child01 : s05_enermy
+public class Goblin : Enemy
 {
+    void Start()
+    {
+        hp = 30;
+        damage = 5;
+    }
+    
     public override void Die()
     {
-        Debug.Log("고블린이 죽었습니다.");
+        Debug.Log("고블린이 비명을 지르며 쓰러집니다!");
+        // 고블린만의 특별한 동작
+        PlayDeathSound();
+        DropItem();
+        GiveExperience(5);  // 고블린은 경험치 적음
+    }
+    
+    void PlayDeathSound()
+    {
+        Debug.Log("고블린 비명 소리!");
     }
 }
 
 // 슬라임
-public class s05_enermy_child02 : s05_enermy
+public class Slime : Enemy
 {
+    void Start()
+    {
+        hp = 20;
+        damage = 3;
+    }
+    
     public override void Die()
     {
-        Debug.Log("슬라임이 녹아내렸습니다.");
+        Debug.Log("슬라임이 녹아내립니다!");
+        // 슬라임은 아이템을 드롭하지 않음
+        GiveExperience(3);
+    }
+    
+    protected override void DropItem()
+    {
+        // 슬라임은 아이템을 드롭하지 않음 (빈 함수)
     }
 }
 
 // 오크
-public class s05_enermy_child03 : s05_enermy
+public class Orc : Enemy
 {
+    void Start()
+    {
+        hp = 100;
+        damage = 20;
+    }
+    
     public override void Die()
     {
-        Debug.Log("오크가 쓰러졌습니다.");
+        Debug.Log("오크가 큰 소리를 내며 쓰러집니다!");
+        // 오크는 더 많은 경험치와 아이템
+        DropItem();
+        DropItem();  // 아이템 2개 드롭
+        GiveExperience(50);  // 많은 경험치
     }
 }
 ```
 
 ### 사용 예시
 ```csharp
-public class s05_enermy_final : MonoBehaviour
+public class CombatSystem : MonoBehaviour
 {
     void Start()
     {
-        s05_enermy enermyGoblin = new s05_enermy_child01();
-        s05_enermy enermySlime = new s05_enermy_child02();
-        s05_enermy enermyOrc = new s05_enermy_child03();
+        // 부모 클래스 타입으로 선언하지만 실제 객체는 자식 클래스
+        Enemy enemy1 = new Goblin();
+        Enemy enemy2 = new Slime();
+        Enemy enemy3 = new Orc();
 
-        enermyGoblin.Die(); // "고블린이 죽었습니다."
-        enermySlime.Die();  // "슬라임이 녹아내렸습니다."
-        enermyOrc.Die();    // "오크가 쓰러졌습니다."
+        enemy1.Die(); // "고블린이 비명을 지르며 쓰러집니다!"
+        enemy2.Die(); // "슬라임이 녹아내립니다!"
+        enemy3.Die(); // "오크가 큰 소리를 내며 쓰러집니다!"
+        
+        // 배열로 관리할 수도 있음
+        Enemy[] enemies = { new Goblin(), new Slime(), new Orc() };
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.Die();  // 각각 다른 방식으로 죽음
+        }
     }
 }
 ```
@@ -146,48 +208,114 @@ public class s05_enermy_final : MonoBehaviour
 
 ### 부모 클래스
 ```csharp
-public class s06_weapon : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
-    // 가상 함수
+    public int damage = 10;
+    public float attackSpeed = 1.0f;
+    
+    // 가상 함수 - 기본 공격 동작
     public virtual void Attack()
     {
-        Debug.Log("Weapon Attacks");
+        Debug.Log("기본 공격! 데미지: " + damage);
+    }
+    
+    // 가상 함수 - 특수 공격
+    public virtual void SpecialAttack()
+    {
+        Debug.Log("특수 공격 사용!");
     }
 }
 ```
 
 ### 자식 클래스들
 ```csharp
-// 레이저
-public class s06_weapon_child01 : s06_weapon
+// 검
+public class Sword : Weapon
 {
+    void Start()
+    {
+        damage = 20;
+        attackSpeed = 1.0f;
+    }
+    
     public override void Attack()
     {
-        Debug.Log("Laser attacks");
+        Debug.Log("검으로 베기 공격! 데미지: " + damage);
+    }
+    
+    public override void SpecialAttack()
+    {
+        Debug.Log("검의 연속 베기 공격!");
     }
 }
 
-// UZI
-public class s06_weapon_child02 : s06_weapon
+// 활
+public class Bow : Weapon
 {
+    void Start()
+    {
+        damage = 15;
+        attackSpeed = 1.5f;
+    }
+    
     public override void Attack()
     {
-        Debug.Log("UZI attacks");
+        Debug.Log("활로 원거리 공격! 데미지: " + damage);
+    }
+    
+    public override void SpecialAttack()
+    {
+        Debug.Log("활의 다중 발사!");
+    }
+}
+
+// 지팡이
+public class Staff : Weapon
+{
+    void Start()
+    {
+        damage = 25;
+        attackSpeed = 0.8f;
+    }
+    
+    public override void Attack()
+    {
+        Debug.Log("마법 공격! 데미지: " + damage);
+    }
+    
+    public override void SpecialAttack()
+    {
+        Debug.Log("지팡이의 강력한 마법 폭발!");
     }
 }
 ```
 
 ### 사용 예시
 ```csharp
-public class s06_weapon_final : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    Weapon currentWeapon;
+    
     void Start()
     {
-        s06_weapon weaponLaser = new s06_weapon_child01();
-        s06_weapon weaponUZI = new s06_weapon_child02();
-
-        weaponLaser.Attack(); // "Laser attacks"    
-        weaponUZI.Attack();   // "UZI attacks"
+        // 무기를 선택할 수 있음
+        currentWeapon = new Sword();
+        // 또는
+        // currentWeapon = new Bow();
+        // currentWeapon = new Staff();
+    }
+    
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            currentWeapon.Attack();  // 선택한 무기에 따라 다른 공격
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            currentWeapon.SpecialAttack();  // 특수 공격
+        }
     }
 }
 ```

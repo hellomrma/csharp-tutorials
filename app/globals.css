@@ -494,6 +494,7 @@ html {
   font-size: 0.8125rem;
   border: 1px solid var(--slate-700);
   color: var(--slate-300);
+  font-family: 'D2Coding', 'D2CodingLigature', monospace;
 }
 
 .empty-state span {
@@ -756,7 +757,7 @@ html {
   padding: 0.25rem 0.5rem;
   border-radius: 0.375rem;
   font-size: 0.8125rem;
-  font-family: monospace;
+  font-family: 'D2Coding', 'D2CodingLigature', monospace;
   font-weight: 600;
   color: var(--slate-200);
   border: 1px solid var(--slate-600);
@@ -788,6 +789,7 @@ html {
   border: none;
   box-shadow: none;
   color: var(--slate-100);
+  font-family: 'D2Coding', 'D2CodingLigature', monospace;
 }
 
 .markdown-content blockquote {

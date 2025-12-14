@@ -3,6 +3,7 @@ import { getTutorialBySlug, getAllTutorialSlugs, getAllTutorials } from '@/lib/m
 import { getLocale } from '@/lib/cookies';
 import type { Metadata } from 'next';
 import TutorialPageContent from '@/app/components/TutorialPageContent';
+import TagSidebar from '@/app/components/TagSidebar';
 
 interface PageProps {
   params: Promise<{
@@ -245,6 +246,11 @@ export default async function TutorialPage({ params }: PageProps) {
     ],
   };
 
+  const allTutorialsForTags = getAllTutorials(locale);
+  const currentCategory = locale === 'en' && tutorial.meta.categoryEn 
+    ? tutorial.meta.categoryEn 
+    : (tutorial.meta.category || 'Unity C# 기초');
+
   return (
     <div className="detail-page">
       <script
@@ -258,6 +264,10 @@ export default async function TutorialPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <TagSidebar 
+        tutorials={allTutorialsForTags}
+        currentCategory={currentCategory}
       />
       <TutorialPageContent 
         tutorial={{ meta: tutorial.meta, content: tutorial.htmlContent }}

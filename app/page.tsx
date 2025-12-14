@@ -5,11 +5,11 @@ import MainPageContent from './components/MainPageContent';
 
 export const metadata: Metadata = {
   title: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
-  description: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요. 기초 문법부터 고급 개념까지, 실전 예제와 상세한 설명으로 프로그래밍 실력을 향상시킬 수 있습니다.',
+  description: 'Unity 게임 개발을 위한 C# 프로그래밍을 처음부터 차근차근 배워보세요. 변수와 조건문부터 클래스와 상속까지, Unity에서 바로 활용할 수 있는 실전 예제와 함께 C#의 핵심 개념을 쉽고 재미있게 학습할 수 있습니다.',
   keywords: ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 기초', 'C# 학습', '프로그래밍 강의', '코딩 학습', 'C# 마스터', 'Unity C#', 'C# 튜토리얼'],
   openGraph: {
     title: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
-    description: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요.',
+    description: 'Unity 게임 개발을 위한 C# 프로그래밍을 처음부터 차근차근 배워보세요. 변수와 조건문부터 클래스와 상속까지, Unity에서 바로 활용할 수 있는 실전 예제와 함께 C#의 핵심 개념을 쉽고 재미있게 학습할 수 있습니다.',
     type: 'website',
   },
   alternates: {
@@ -84,8 +84,8 @@ export default async function Home() {
     '@type': 'Course',
     name: locale === 'en' ? 'Master Unity C# Programming' : 'Unity C# 마스터하기',
     description: locale === 'en'
-      ? 'Comprehensive course to learn everything about C# programming step by step, from Unity game development to real-world applications'
-      : 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배우는 종합 교육 과정',
+      ? 'Learn C# programming for Unity game development from the ground up. Master core concepts through practical examples you can immediately apply in Unity.'
+      : 'Unity 게임 개발을 위한 C# 프로그래밍을 처음부터 차근차근 배우는 종합 교육 과정. Unity에서 바로 활용할 수 있는 실전 예제와 함께 핵심 개념을 마스터하세요.',
     provider: {
       '@type': 'Organization',
       name: 'C# Tutorials',

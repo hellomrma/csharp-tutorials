@@ -9,17 +9,17 @@ import { LanguageProvider } from "./components/LanguageProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
-const siteName = 'C# 프로그래밍 튜토리얼';
-const defaultDescription = 'Unity와 C# 프로그래밍 언어를 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트입니다. 실전 예제와 상세한 설명으로 C# 기초부터 고급까지 마스터하세요.';
+const siteName = '유니티 C# 튜토리얼';
+const defaultDescription = 'Unity와 C# 프로그래밍을 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트입니다. 실전 예제와 상세한 설명으로 Unity C# 기초부터 고급까지 마스터하세요.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
+    default: '유니티 C# 튜토리얼 | Unity C# 마스터하기',
     template: `%s`,
   },
   description: defaultDescription,
-  keywords: ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 기초', 'C# 학습', '프로그래밍 강의'],
+  keywords: ['Unity C#', '유니티 C#', 'Unity 튜토리얼', 'C# 튜토리얼', 'Unity 게임 개발', 'C# 프로그래밍', 'Unity 학습', 'C# 기초', 'Unity 기초', '게임 개발', 'Unity C# 마스터'],
   authors: [{ name: 'C# Tutorials' }],
   creator: 'C# Tutorials',
   publisher: 'C# Tutorials',
@@ -86,7 +86,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* Google tag (gtag.js) */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-P80MG4FY8E"
+          src="https://www.googletagmanager.com/gtag/js?id=G-91EN6ZPDC2"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -94,7 +94,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-P80MG4FY8E');
+            gtag('config', 'G-91EN6ZPDC2');
           `}
         </Script>
         <LanguageProvider>

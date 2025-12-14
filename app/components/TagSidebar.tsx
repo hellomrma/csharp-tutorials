@@ -99,7 +99,7 @@ export default function TagSidebar({ tutorials, currentCategory }: TagSidebarPro
   // 튜토리얼 개수로 정렬 (많이 사용되는 순서)
   const sortedTags = Array.from(tagMap.entries())
     .sort((a, b) => b[1].length - a[1].length)
-    .slice(0, 15); // 상위 15개 표시
+    .slice(0, 30); // 상위 30개 표시
 
   // 각 태그의 첫 번째 튜토리얼 URL 생성
   const getTagUrl = (tag: string, tagTutorials: TutorialMeta[]) => {
@@ -152,10 +152,9 @@ export default function TagSidebar({ tutorials, currentCategory }: TagSidebarPro
                 key={tag}
                 href={url}
                 className={`tag-item ${isActive ? 'tag-item-active' : ''}`}
-                aria-label={`#${tag} (${tagTutorials.length} ${locale === 'en' ? 'tutorials' : '개'})`}
+                aria-label={`#${tag}`}
               >
                 <span className="tag-name">#{tag}</span>
-                <span className="tag-count">{tagTutorials.length}</span>
               </Link>
             );
           })}

@@ -13,9 +13,9 @@ export const translations = {
     
     // 메인 페이지
     mainTitle: '마스터하기',
-    mainTitleEn: '(C# Master Programming)',
-    mainSubtitle: 'Unity 게임 개발을 위한 C# 프로그래밍을 처음부터 차근차근 배워보세요',
-    mainDescription: '변수와 조건문부터 클래스와 상속까지, Unity에서 바로 활용할 수 있는 실전 예제와 함께 C#의 핵심 개념을 쉽고 재미있게 학습할 수 있습니다.',
+    mainTitleEn: '(Master Programming)',
+    mainSubtitle: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요',
+    mainDescription: '기초 문법부터 고급 개념까지, 실전 예제와 상세한 설명으로 프로그래밍 실력을 한 단계씩 향상시킬 수 있습니다.',
     tutorialList: '튜토리얼 목록',
     noTutorials: '아직 튜토리얼이 없습니다',
     addTutorials: '디렉토리에 MD 파일을 추가하세요',
@@ -32,7 +32,7 @@ export const translations = {
     
     // SEO
     seoTitle: 'C# 프로그래밍 마스터하기 | Unity 게임 개발 튜토리얼',
-    seoDescription: 'Unity 게임 개발을 위한 C# 프로그래밍을 처음부터 차근차근 배워보세요. 변수와 조건문부터 클래스와 상속까지, Unity에서 바로 활용할 수 있는 실전 예제와 함께 C#의 핵심 개념을 쉽고 재미있게 학습할 수 있습니다.',
+    seoDescription: 'Unity 게임 개발부터 실전 애플리케이션까지, C# 프로그래밍의 모든 것을 단계별로 배워보세요. 기초 문법부터 고급 개념까지, 실전 예제와 상세한 설명으로 프로그래밍 실력을 향상시킬 수 있습니다.',
   },
   en: {
     // Common
@@ -43,9 +43,9 @@ export const translations = {
     
     // Main page
     mainTitle: 'Master',
-    mainTitleEn: '(C# Master Programming)',
-    mainSubtitle: 'Learn C# programming for Unity game development from the ground up',
-    mainDescription: 'From variables and conditionals to classes and inheritance, master the core concepts of C# through practical examples that you can immediately apply in Unity.',
+    mainTitleEn: '(Programming)',
+    mainSubtitle: 'Learn everything about C# programming step by step, from Unity game development to real-world applications',
+    mainDescription: 'From basic syntax to advanced concepts, improve your programming skills step by step with practical examples and detailed explanations.',
     tutorialList: 'Tutorial List',
     noTutorials: 'No tutorials yet',
     addTutorials: 'Add MD files to the directory',
@@ -62,7 +62,7 @@ export const translations = {
     
     // SEO
     seoTitle: 'Master C# Programming | Unity Game Development Tutorial',
-    seoDescription: 'Learn C# programming for Unity game development from the ground up. From variables and conditionals to classes and inheritance, master the core concepts of C# through practical examples that you can immediately apply in Unity.',
+    seoDescription: 'Learn everything about C# programming step by step, from Unity game development to real-world applications. From basic syntax to advanced concepts, improve your programming skills with practical examples and detailed explanations.',
   },
 } as const;
 

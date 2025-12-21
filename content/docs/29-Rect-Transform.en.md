@@ -4,8 +4,8 @@ titleEn: Rect Transform
 slugEn: 29-rect-transform
 description: Learn about Rect Transform used in Unity UI system. Covers core concepts related to UI placement including Anchors, Pivot, Rotation, and more.
 descriptionEn: Learn about Rect Transform used in Unity UI system. Covers core concepts related to UI placement including Anchors, Pivot, Rotation, and more.
-category: Unity C# Applications
-categoryEn: Unity C# Applications
+category: Unity C# Basics
+categoryEn: Unity C# Basics
 order: 29
 ---
 

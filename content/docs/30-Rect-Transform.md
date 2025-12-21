@@ -1,15 +1,15 @@
 ---
 title: Rect Transform
 titleEn: Rect Transform
-slugEn: 29-rect-transform
+slugEn: 30-rect-transform
 description: Unity UI 시스템에서 사용되는 Rect Transform을 학습합니다. Anchors, Pivot, Rotation 등 UI 배치와 관련된 핵심 개념을 다룹니다.
 descriptionEn: Learn about Rect Transform used in Unity UI system. Covers core concepts related to UI placement including Anchors, Pivot, Rotation, and more.
-category: Unity C# 기초
-categoryEn: Unity C# Basics
-order: 29
+category: Unity C# 응용
+categoryEn: Unity C# Application
+order: 30
 ---
 
-# 29. Rect Transform
+# 30. Rect Transform
 
 ## Rect Transform이란?
 

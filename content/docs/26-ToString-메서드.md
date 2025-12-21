@@ -1,15 +1,15 @@
 ---
 title: ToString 메서드
 titleEn: ToString Method
-slugEn: 30-tostring-method
+slugEn: 26-tostring-method
 description: C#의 ToString() 메서드를 학습합니다. 숫자, 객체를 문자열로 변환하고, 포맷 지정자를 사용하여 원하는 형식으로 출력하는 방법을 이해합니다.
 descriptionEn: Learn about the ToString() method in C#. Understand how to convert numbers and objects to strings, and use format specifiers to output in desired formats.
 category: Unity C# 기초
 categoryEn: Unity C# Basics
-order: 30
+order: 26
 ---
 
-# 30. ToString 메서드
+# 26. ToString 메서드
 
 ## ToString이란?
 

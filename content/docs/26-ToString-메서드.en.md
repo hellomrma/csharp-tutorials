@@ -1,15 +1,15 @@
 ---
 title: ToString Method
 titleEn: ToString Method
-slugEn: 30-tostring-method
+slugEn: 26-tostring-method
 description: Learn about the ToString() method in C#. Understand how to convert numbers and objects to strings, and use format specifiers to output in desired formats.
 descriptionEn: Learn about the ToString() method in C#. Understand how to convert numbers and objects to strings, and use format specifiers to output in desired formats.
 category: Unity C# Basics
 categoryEn: Unity C# Basics
-order: 30
+order: 26
 ---
 
-# 30. ToString Method
+# 26. ToString Method
 
 ## What is ToString?
 

@@ -942,7 +942,7 @@ pre code.hljs.language-csharp,
     display: block;
     position: fixed;
     top: 200px;
-    right: 2rem;
+    right: 30px;
     width: 280px;
     height: fit-content;
     max-height: calc(100vh - 220px);
@@ -1042,13 +1042,13 @@ pre code.hljs.language-csharp,
 
 @media (min-width: 1280px) {
   .tag-sidebar {
-    right: calc((100vw - 1280px) / 2 + 2rem);
+    right: calc((100vw - 1280px) / 2 + 30px);
   }
 }
 
 @media (min-width: 1536px) {
   .tag-sidebar {
-    right: calc((100vw - 1400px) / 4 + 2rem);
+    right: calc((100vw - 1400px) / 4 + 30px);
   }
 }
 

@@ -3,70 +3,12 @@
 import Link from 'next/link';
 import { useLanguage } from './LanguageProvider';
 import type { TutorialMeta } from '@/lib/markdown';
+import { getPopularTags } from '@/lib/tags';
 
 interface TagSidebarProps {
   tutorials: TutorialMeta[];
   currentCategory?: string;
 }
-
-// 주요 태그 정의 (튜토리얼 제목 기반)
-const getPopularTags = (locale: string): string[] => {
-  if (locale === 'en') {
-    return [
-      'Variables',
-      'Operators',
-      'Constants',
-      'Enum',
-      'Functions',
-      'Return Values',
-      'Parameters',
-      'Overloading',
-      'Classes',
-      'Inheritance',
-      'Access Modifiers',
-      'Properties',
-      'Constructors',
-      'Virtual',
-      'Interfaces',
-      'Delegates',
-      'Events',
-      'Arrays',
-      'Lists',
-      'Loops',
-      'Dictionary',
-      'Unity',
-    ];
-  } else {
-    return [
-      '변수',
-      '조건문',
-      '연산자',
-      '상수',
-      'switch',
-      'enum',
-      '열거형',
-      '함수',
-      '반환값',
-      '매개변수',
-      '오버로딩',
-      '클래스',
-      '상속',
-      '접근제한자',
-      '프로퍼티',
-      '생성자',
-      '가상함수',
-      '인터페이스',
-      '델리게이트',
-      '이벤트',
-      '배열',
-      '리스트',
-      '반복문',
-      '딕셔너리',
-      '유니티',
-      'MonoBehaviour',
-    ];
-  }
-};
 
 export default function TagSidebar({ tutorials, currentCategory }: TagSidebarProps) {
   const { locale } = useLanguage();

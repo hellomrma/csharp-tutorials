@@ -941,13 +941,32 @@ pre code.hljs.language-csharp,
   .tag-sidebar {
     display: block;
     position: fixed;
-    top: 200px;
-    right: 30px;
+    top: 190px;
+    right: 10px;
     width: 187px;
     height: fit-content;
     max-height: calc(100vh - 220px);
     overflow-y: auto;
     z-index: 50;
+  }
+
+  /* 태그 사이드바 스크롤바 스타일 */
+  .tag-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .tag-sidebar::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 3px;
+  }
+
+  .tag-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.5);
+    border-radius: 3px;
+  }
+
+  .tag-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.7);
   }
 
   .tag-sidebar-content {
@@ -1042,13 +1061,13 @@ pre code.hljs.language-csharp,
 
 @media (min-width: 1280px) {
   .tag-sidebar {
-    right: calc((100vw - 1280px) / 2 + 30px);
+    right: calc((100vw - 1280px) / 2 + 10px);
   }
 }
 
 @media (min-width: 1536px) {
   .tag-sidebar {
-    right: calc((100vw - 1400px) / 4 + 30px);
+    right: calc((100vw - 1400px) / 4 + 10px);
   }
 }
 

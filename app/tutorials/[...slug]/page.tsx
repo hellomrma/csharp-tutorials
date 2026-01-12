@@ -4,6 +4,12 @@ import { getLocale } from '@/lib/cookies';
 import type { Metadata } from 'next';
 import TutorialPageContent from '@/app/components/TutorialPageContent';
 import TagSidebar from '@/app/components/TagSidebar';
+import {
+  generateArticleJsonLd,
+  generateCourseJsonLd,
+  generateBreadcrumbJsonLd,
+  renderJsonLd,
+} from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{
@@ -135,116 +141,10 @@ export default async function TutorialPage({ params }: PageProps) {
   const prevTutorial = currentIndex > 0 ? allTutorials[currentIndex - 1] : null;
   const nextTutorial = currentIndex >= 0 && currentIndex < allTutorials.length - 1 ? allTutorials[currentIndex + 1] : null;
 
-  // 구조화된 데이터 (JSON-LD) - Article
-  const articleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: tutorial.meta.title,
-    description: tutorial.meta.description || (locale === 'en'
-      ? `${tutorial.meta.title} - Unity C# Tutorial`
-      : `${tutorial.meta.title} - Unity C# 튜토리얼`),
-    author: {
-      '@type': 'Organization',
-      name: 'C# Tutorials',
-      url: siteUrl,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'C# Tutorials',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${siteUrl}/logo.png`,
-      },
-    },
-    datePublished: tutorial.meta.date || new Date().toISOString(),
-    dateModified: tutorial.meta.dateModified || tutorial.meta.date || new Date().toISOString(),
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${siteUrl}/tutorials/${slugString}`,
-    },
-    articleSection: tutorial.meta.category || 'Unity C# 기초',
-    keywords: tutorial.meta.keywords || (locale === 'en'
-      ? ['C#', 'CSharp', 'Programming', 'Tutorial', 'Unity']
-      : ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity']),
-    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
-    about: {
-      '@type': 'Thing',
-      name: 'C# Programming',
-      description: 'C# 프로그래밍 언어 학습',
-    },
-    teaches: 'C# 프로그래밍',
-    educationalLevel: 'Beginner',
-  };
-
-  // 구조화된 데이터 (JSON-LD) - Course (GEO 최적화)
-  const courseJsonLd: {
-    '@context': string;
-    '@type': string;
-    name: string;
-    description: string;
-    provider: { '@type': string; name: string; url: string };
-    courseCode: string;
-    educationalLevel: string;
-    inLanguage: string;
-    url: string;
-    teaches: string;
-    hasCourseInstance: { '@type': string; courseMode: string; instructor: { '@type': string; name: string } };
-    coursePrerequisites?: { '@type': string; name: string; url: string };
-  } = {
-    '@context': 'https://schema.org',
-    '@type': 'Course',
-    name: tutorial.meta.title,
-    description: tutorial.meta.description || (locale === 'en'
-      ? `${tutorial.meta.title} - Unity C# Tutorial`
-      : `${tutorial.meta.title} - Unity C# 튜토리얼`),
-    provider: {
-      '@type': 'Organization',
-      name: 'C# Tutorials',
-      url: siteUrl,
-    },
-    courseCode: `C#-${String(tutorial.meta.order || 0).padStart(2, '0')}`,
-    educationalLevel: 'Beginner',
-    inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
-    url: `${siteUrl}/tutorials/${slugString}`,
-    teaches: 'C# 프로그래밍',
-    hasCourseInstance: {
-      '@type': 'CourseInstance',
-      courseMode: 'online',
-      instructor: {
-        '@type': 'Organization',
-        name: 'C# Tutorials',
-      },
-    },
-  };
-
-  // 이전 튜토리얼이 있으면 선수과목으로 추가
-  if (prevTutorial) {
-    courseJsonLd.coursePrerequisites = {
-      '@type': 'Course',
-      name: prevTutorial.title,
-      url: `${siteUrl}/tutorials/${prevTutorial.slug}`,
-    };
-  }
-
-  // 구조화된 데이터 (JSON-LD) - BreadcrumbList
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: '홈',
-        item: siteUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: tutorial.meta.title,
-        item: `${siteUrl}/tutorials/${slugString}`,
-      },
-    ],
-  };
+  // JSON-LD 구조화된 데이터 생성
+  const articleJsonLd = generateArticleJsonLd(tutorial.meta, slugString, locale);
+  const courseJsonLd = generateCourseJsonLd(tutorial.meta, slugString, locale, prevTutorial);
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd(tutorial.meta, slugString, locale);
 
   const allTutorialsForTags = getAllTutorials(locale);
   const currentCategory = locale === 'en' && tutorial.meta.categoryEn 
@@ -255,21 +155,21 @@ export default async function TutorialPage({ params }: PageProps) {
     <div className="detail-page">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: renderJsonLd(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: renderJsonLd(courseJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: renderJsonLd(breadcrumbJsonLd) }}
       />
-      <TagSidebar 
+      <TagSidebar
         tutorials={allTutorialsForTags}
         currentCategory={currentCategory}
       />
-      <TutorialPageContent 
+      <TutorialPageContent
         tutorial={{ meta: tutorial.meta, content: tutorial.htmlContent }}
         prevTutorial={prevTutorial}
         nextTutorial={nextTutorial}

@@ -8,6 +8,7 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeHighlight from 'rehype-highlight';
 import { replaceTermsInHtml } from './terms';
 import { type Locale, defaultLocale } from './i18n';
+import { tutorialCache, cacheKeys } from './cache';
 
 const docsDirectory = path.join(process.cwd(), 'content/docs');
 
@@ -105,15 +106,29 @@ function getTutorialsFromDirectory(directory: string, basePath: string = '', loc
  * content/docs에서 읽어옵니다
  */
 export function getAllTutorials(locale: Locale = defaultLocale): TutorialMeta[] {
+  // 캐시 확인
+  const cacheKey = cacheKeys.allTutorials(locale);
+  const cached = tutorialCache.get<TutorialMeta[]>(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
+
+  // 캐시 미스 - 파일 시스템에서 읽기
   const tutorials = getTutorialsFromDirectory(docsDirectory, 'docs', locale);
 
   // order 기준으로 정렬
-  return tutorials.sort((a, b) => {
+  const sorted = tutorials.sort((a, b) => {
     if (a.order !== undefined && b.order !== undefined) {
       return a.order - b.order;
     }
     return a.slug.localeCompare(b.slug);
   });
+
+  // 캐시에 저장
+  tutorialCache.set(cacheKey, sorted);
+
+  return sorted;
 }
 
 /**
@@ -121,6 +136,14 @@ export function getAllTutorials(locale: Locale = defaultLocale): TutorialMeta[] 
  * content/docs에서 찾습니다
  */
 export async function getTutorialBySlug(slug: string, locale: Locale = defaultLocale): Promise<Tutorial | null> {
+  // 캐시 확인
+  const cacheKey = cacheKeys.tutorialBySlug(slug, locale);
+  const cached = tutorialCache.get<Tutorial>(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
+
   try {
     // URL 디코딩 (한글 파일명 처리)
     let decodedSlug = slug;
@@ -275,8 +298,8 @@ export async function getTutorialBySlug(slug: string, locale: Locale = defaultLo
     // 언어에 따라 카테고리 선택
     const category = locale === 'en' && data.categoryEn ? data.categoryEn : (data.category || 'Unity C# 기초');
     const description = locale === 'en' && data.descriptionEn ? data.descriptionEn : data.description;
-    
-    return {
+
+    const tutorial: Tutorial = {
       meta: {
         slug: normalizedSlug,
         slugEn: `docs/${slugEn}`,
@@ -292,6 +315,11 @@ export async function getTutorialBySlug(slug: string, locale: Locale = defaultLo
       content,
       htmlContent,
     };
+
+    // 캐시에 저장
+    tutorialCache.set(cacheKey, tutorial);
+
+    return tutorial;
   } catch (error) {
     // 에러 발생 시 null 반환
     console.error('Error loading tutorial:', error);
@@ -305,29 +333,40 @@ export async function getTutorialBySlug(slug: string, locale: Locale = defaultLo
  * 한국어와 영문 slug를 모두 반환합니다
  */
 export function getAllTutorialSlugs(): string[] {
+  // 캐시 확인
+  const cacheKey = cacheKeys.allSlugs();
+  const cached = tutorialCache.get<string[]>(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
+
   const slugs: string[] = [];
 
   if (fs.existsSync(docsDirectory)) {
     const docsFiles = fs.readdirSync(docsDirectory);
     const koFiles = docsFiles.filter((name) => name.endsWith('.md') && !name.endsWith('.en.md'));
-    
+
     koFiles.forEach((name) => {
       const filePath = path.join(docsDirectory, name);
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data } = matter(fileContents);
-      
+
       const koSlug = getSlugFromFilename(name);
       const enSlug = data.slugEn || koSlug;
-      
+
       // 한국어 slug 추가
       slugs.push(`docs/${koSlug}`);
-      
+
       // 영문 slug가 다르면 추가
       if (enSlug !== koSlug) {
         slugs.push(`docs/${enSlug}`);
       }
     });
   }
+
+  // 캐시에 저장
+  tutorialCache.set(cacheKey, slugs);
 
   return slugs;
 }

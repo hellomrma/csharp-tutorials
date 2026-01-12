@@ -78,11 +78,12 @@ class MemoryCache {
   clearByPrefix(prefix: string): void {
     const keysToDelete: string[] = [];
 
-    for (const key of this.cache.keys()) {
+    // Array.from()을 사용하여 iterator를 배열로 변환
+    Array.from(this.cache.keys()).forEach(key => {
       if (key.startsWith(prefix)) {
         keysToDelete.push(key);
       }
-    }
+    });
 
     keysToDelete.forEach(key => this.cache.delete(key));
   }

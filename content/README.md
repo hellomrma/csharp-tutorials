@@ -43,6 +43,23 @@
 30. [Rect Transform](docs/30-Rect-Transform.md)
 31. [Unity 내장 함수 정리](docs/31-Unity-내장-함수-정리.md)
 
+### Unity C# 고급
+
+32. [GameObject 찾기와 컴포넌트 가져오기](docs/32-GameObject-찾기와-컴포넌트-가져오기.md)
+33. [오브젝트 생성과 삭제](docs/33-오브젝트-생성과-삭제.md)
+34. [2D 충돌 감지](docs/34-2D-충돌-감지.md)
+35. [코루틴 (Coroutine)](docs/35-코루틴-Coroutine.md)
+36. [싱글톤 패턴](docs/36-싱글톤-패턴.md)
+37. [Rigidbody2D와 Collider2D](docs/37-Rigidbody2D와-Collider2D.md)
+38. [화살 피하기 게임 구현](docs/38-화살-피하기-게임-구현.md)
+39. [원-원 충돌 감지 알고리즘](docs/39-원-원-충돌-감지-알고리즘.md)
+40. [정적 변수 (static)](docs/40-정적-변수-static.md)
+41. [Mathf 고급 함수와 부동소수점 오차](docs/41-Mathf-고급-함수와-부동소수점-오차.md)
+42. [Unity 속성 (Attributes)](docs/42-Unity-속성-Attributes.md)
+43. [씬 관리 (SceneManager)](docs/43-씬-관리-SceneManager.md)
+44. [2D 플랫포머 게임 기초](docs/44-2D-플랫포머-게임-기초.md)
+45. [밤송이 던지기 게임](docs/45-밤송이-던지기-게임.md)
+
 ---
 
 ## 🎯 학습 순서 추천
@@ -83,6 +100,14 @@ Unity와 C#의 고급 기능을 학습합니다.
 23. **23단계**: 로컬 좌표계와 월드 좌표계 → Transform 좌표계 이해
 24. **24단계**: Rect Transform → UI 요소 배치와 제어
 25. **25단계**: Unity 내장 함수 정리 → Input, Transform, Time 등 주요 함수 참고
+
+### 심화 학습 (32~44)
+Unity 고급 기능과 실전 게임 개발을 학습합니다.
+26. **26단계**: GameObject 찾기와 컴포넌트 가져오기 → 동적 오브젝트 참조
+27. **27단계**: 오브젝트 생성과 삭제 → Instantiate, Destroy 활용
+28. **28단계**: 2D 충돌 감지와 물리 → Collision, Trigger 시스템
+29. **29단계**: 코루틴과 싱글톤 → 비동기 처리와 디자인 패턴
+30. **30단계**: 2D 플랫포머 게임 기초 → 플레이어 컨트롤러, 카메라, 씬 전환
 
 ---
 

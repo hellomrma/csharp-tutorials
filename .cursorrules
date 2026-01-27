@@ -1,0 +1,102 @@
+# Cursor Rules - Unity C# Tutorial 프로젝트
+
+## 프로젝트 개요
+
+이 프로젝트는 Unity C# 프로그래밍 튜토리얼 웹사이트입니다.
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Markdown 기반 콘텐츠 (43개 튜토리얼)
+- 다국어 지원 (한국어/영어)
+
+## 응답 언어
+
+항상 한국어로 응답하세요.
+
+## 코딩 스타일
+
+### TypeScript
+- 명시적 타입 정의 사용
+- interface 선호 (객체 타입 정의 시)
+- any 타입 지양
+- 유틸리티 함수는 lib/ 디렉토리에 배치
+
+### React/Next.js
+- 서버 컴포넌트 우선 사용 (App Router)
+- 클라이언트 컴포넌트 필요 시 'use client' 명시
+- 컴포넌트는 app/components/에 배치
+- PascalCase 컴포넌트 명명
+
+### CSS
+- Tailwind CSS 유틸리티 클래스 사용
+- 커스텀 스타일은 globals.css에 정의
+
+### 파일 명명
+- 컴포넌트: PascalCase.tsx
+- 유틸리티: camelCase.ts
+- 튜토리얼: XX-제목.md (XX는 순서 번호)
+
+## 디렉토리 구조
+
+```
+app/                    # Next.js App Router
+├── components/         # React 컴포넌트
+├── tutorials/[...slug]/ # 동적 튜토리얼 라우트
+content/docs/           # 튜토리얼 마크다운
+lib/                    # 유틸리티 함수
+```
+
+## 주요 파일
+
+- lib/markdown.ts: MD 파싱 및 HTML 변환
+- lib/i18n.ts: 다국어 번역
+- lib/terms.ts: 용어 자동 변환 사전
+- lib/cache.ts: 캐싱 시스템
+
+## 튜토리얼 작성
+
+새 튜토리얼 추가 시:
+1. content/docs/에 XX-제목.md 생성
+2. frontmatter 필수: title, description
+3. 영문 버전: XX-제목.en.md
+
+frontmatter 예시:
+```yaml
+---
+title: "제목"
+titleEn: "Title"
+category: "기초"
+categoryEn: "Basics"
+description: "설명"
+descriptionEn: "Description"
+slugEn: "english-slug"
+---
+```
+
+## 명령어
+
+```bash
+npm run dev    # 개발 서버
+npm run build  # 빌드
+npm run lint   # 린트 검사
+```
+
+## 주의사항
+
+- content/docs/ 파일명의 숫자가 정렬 순서 결정
+- 용어 자동 변환은 코드 블록에서 제외됨
+- SSG (정적 사이트 생성) 사용
+- 새 튜토리얼 추가 시 자동으로 홈페이지에 표시됨
+
+## 코드 품질
+
+- ESLint 규칙 준수
+- TypeScript strict 모드 사용
+- 불필요한 console.log 제거
+- 에러 핸들링 포함
+
+## Git 커밋
+
+- 의미 있는 커밋 메시지 작성
+- 한국어 커밋 메시지 사용 가능
+- 기능별로 커밋 분리

@@ -34,7 +34,7 @@ npm start
 
 - **Next.js 14** - React 프레임워크 (App Router)
 - **TypeScript** - 타입 안정성
-- **CSS** - 일반 CSS로 스타일 관리
+- **Tailwind CSS** - 유틸리티 기반 CSS 프레임워크
 - **gray-matter** - Frontmatter 파싱
 - **remark/rehype** - Markdown을 HTML로 변환
 - **rehype-highlight** - 코드 하이라이팅
@@ -44,39 +44,102 @@ npm start
 ```
 csharp-tutorials/
 ├── app/                          # Next.js App Router 디렉토리
+│   ├── components/               # React 컴포넌트
+│   │   ├── Footer.tsx            # 푸터 컴포넌트
+│   │   ├── Header.tsx            # 헤더/네비게이션
+│   │   ├── LanguageProvider.tsx  # 다국어 Context Provider
+│   │   ├── LanguageSwitcher.tsx  # 언어 전환 UI
+│   │   ├── MainPageContent.tsx   # 메인 페이지 콘텐츠
+│   │   ├── TagSidebar.tsx        # 태그 사이드바
+│   │   └── TutorialPageContent.tsx # 튜토리얼 상세 페이지
+│   ├── tutorials/
+│   │   └── [...slug]/
+│   │       └── page.tsx          # 동적 튜토리얼 페이지 (catch-all 라우트)
 │   ├── layout.tsx                # 루트 레이아웃
 │   ├── page.tsx                  # 홈 페이지 (튜토리얼 목록)
 │   ├── globals.css               # 전역 스타일
 │   ├── sitemap.ts                # 사이트맵 자동 생성
 │   ├── robots.ts                 # robots.txt 자동 생성
-│   └── tutorials/
-│       └── [...slug]/
-│           └── page.tsx          # 동적 튜토리얼 페이지 (catch-all 라우트)
-├── content/                       # 마크다운 콘텐츠 파일
-│   └── docs/                     # 튜토리얼 MD 파일들
-│       ├── 01-변수와-조건문-기초.md
-│       ├── 02-비교-연산자와-논리-연산자.md
-│       ├── 03-상수와-switch-case-문.md
-│       ├── ... (중간 파일들)
-│       ├── 21-델리게이트-Delegate.md
-│       ├── 22-이벤트-Event.md
-│       ├── 23-유니티-함수-실행-순서.md
-│       ├── 24-딕셔너리-Dictionary.md
-│       ├── 25-Random-함수.md
-│       ├── 26-ToString-메서드.md
-│       ├── 27-룰렛-회전-제어.md
-│       ├── 28-마우스-드래그로-자동차-제어.md
-│       ├── 29-로컬-좌표계와-월드-좌표계.md
-│       ├── 30-Rect-Transform.md
-│       ├── 31-Unity-내장-함수-정리.md
-│       └── ... (총 31개 파일, 각 파일에 영문 버전 .en.md 파일 포함)
+│   ├── error.tsx                 # 에러 페이지
+│   └── not-found.tsx             # 404 페이지
+├── content/                      # 마크다운 콘텐츠 파일
+│   ├── docs/                     # 튜토리얼 MD 파일들 (총 43개, 각각 영문 버전 포함)
+│   │   ├── 01-변수와-조건문-기초.md
+│   │   ├── 01-변수와-조건문-기초.en.md
+│   │   ├── ...
+│   │   ├── 43-씬-관리-SceneManager.md
+│   │   ├── 44-2D-플랫포머-게임-기초.md
+│   │   └── 45-밤송이-던지기-게임.md
+│   └── sources/                  # 소스 코드 예제
 ├── lib/                          # 유틸리티 함수
-│   └── markdown.ts               # MD 파일 파싱 및 변환 함수
-├── public/                       # 정적 파일
+│   ├── markdown.ts               # MD 파일 파싱 및 변환
+│   ├── i18n.ts                   # 다국어 설정 및 번역
+│   ├── cache.ts                  # 튜토리얼 캐싱
+│   ├── cookies.ts                # 쿠키 관리
+│   ├── seo.ts                    # SEO 유틸리티
+│   ├── tags.ts                   # 태그 관리
+│   └── terms.ts                  # 용어 자동 변환
 ├── package.json                  # 프로젝트 의존성
 ├── tailwind.config.ts            # Tailwind CSS 설정
+├── next.config.js                # Next.js 설정
 └── tsconfig.json                 # TypeScript 설정
 ```
+
+## 튜토리얼 목록 (총 45개)
+
+### Unity C# 기초 (1~26)
+
+1. 변수와 조건문 기초
+2. 비교 연산자와 논리 연산자
+3. 상수와 switch-case 문
+4. 열거형 (enum)
+5. 함수 기초
+6. 반환값이 있는 함수
+7. 매개변수가 있는 함수
+8. 여러 매개변수 사용하기
+9. 사칙연산 함수 만들기
+10. 함수 오버로딩
+11. 클래스와 상속
+12. 접근 제한자 심화
+13. 배열 (Array)
+14. 리스트 (List)
+15. 값 형식과 참조 형식
+16. 반복문 (Loop)
+17. 변수와 프로퍼티
+18. 클래스 생성자
+19. 가상 함수 (virtual/override)
+20. 인터페이스 (Interface)
+21. 델리게이트 (Delegate)
+22. 이벤트 (Event)
+23. 유니티 함수 실행 순서
+24. 딕셔너리 (Dictionary)
+25. Random 함수
+26. ToString 메서드
+
+### Unity C# 응용 (27~31)
+
+27. 룰렛 회전 제어
+28. 마우스 드래그로 자동차 제어
+29. 로컬 좌표계와 월드 좌표계
+30. Rect Transform
+31. Unity 내장 함수 정리
+
+### Unity C# 고급 (32~45)
+
+32. GameObject 찾기와 컴포넌트 가져오기
+33. 오브젝트 생성과 삭제
+34. 2D 충돌 감지
+35. 코루틴 (Coroutine)
+36. 싱글톤 패턴
+37. Rigidbody2D와 Collider2D
+38. 화살 피하기 게임 구현
+39. 원-원 충돌 감지 알고리즘
+40. 정적 변수 (static)
+41. Mathf 고급 함수와 부동소수점 오차
+42. Unity 속성 (Attributes)
+43. 씬 관리 (SceneManager)
+44. 2D 플랫포머 게임 기초
+45. 밤송이 던지기 게임
 
 ## MD 파일 관리
 
@@ -91,7 +154,7 @@ csharp-tutorials/
 - 숫자로 시작하여 순서를 나타냅니다 (예: `01-변수와-조건문-기초.md`, `02-비교-연산자와-논리-연산자.md`)
 - 하이픈(-)으로 단어를 구분합니다
 - 한글 파일명을 지원합니다
-- 파일명의 첫 번째 숫자가 정렬 순서로 사용됩니다
+- 영문 버전은 `.en.md` 확장자 사용 (예: `01-변수와-조건문-기초.en.md`)
 
 ### MD 파일 형식
 
@@ -100,9 +163,13 @@ csharp-tutorials/
 ```markdown
 ---
 title: "기초 문법"
+titleEn: "Basic Syntax"
 category: "기초"
+categoryEn: "Basics"
 order: 1
 description: "C#의 기본 문법을 학습합니다"
+descriptionEn: "Learn basic C# syntax"
+slugEn: "01-variables-and-conditionals"
 ---
 
 # 제목
@@ -110,36 +177,18 @@ description: "C#의 기본 문법을 학습합니다"
 ## 섹션
 
 내용...
-
-### 하위 섹션
-
-코드 예제:
-
-```csharp
-int number = 10;
-Console.WriteLine(number);
-```
 ```
 
-### Frontmatter (선택사항)
-
-파일 상단에 YAML frontmatter를 추가하여 메타데이터를 포함할 수 있습니다:
+### Frontmatter 필드
 
 - `title`: 튜토리얼 제목 (없으면 파일명에서 추출)
-- `titleEn`: 영어 제목 (선택사항, 리스트에 "한글 제목 (English Title)" 형식으로 표시)
+- `titleEn`: 영어 제목
 - `category`: 카테고리 (예: "기초", "고급")
+- `categoryEn`: 영어 카테고리
 - `order`: 정렬 순서 (없으면 파일명의 숫자 사용)
 - `description`: 설명 (홈페이지에 표시)
-
-예시:
-```yaml
----
-title: "변수와 조건문 기초"
-titleEn: "Variables and Conditional Statements"
-category: "기초"
-order: 1
----
-```
+- `descriptionEn`: 영어 설명
+- `slugEn`: 영어 URL slug
 
 ### 자동 인식
 
@@ -147,38 +196,37 @@ order: 1
 - 파일명의 숫자 순서대로 정렬됩니다 (예: `01-`, `02-`, ...)
 - 각 튜토리얼은 `/tutorials/docs/[파일명]` 경로로 접근할 수 있습니다
 - 한글 파일명도 완벽하게 지원됩니다 (URL 인코딩/디코딩 자동 처리)
-- 제목은 다음 순서로 자동 추출됩니다:
-  1. Frontmatter의 `title` 필드
-  2. MD 파일 첫 번째 줄의 `# 제목`
-  3. 파일명에서 숫자와 확장자 제거 후 하이픈을 공백으로 변환
-
-### 특수 기능
-
-- **README.md 링크 자동 변환**: MD 파일 내부의 `[← 목차로 돌아가기](../README.md)` 링크가 자동으로 홈페이지(`/`)로 변환됩니다
-- **이전/다음 네비게이션**: 각 튜토리얼 페이지 하단에 이전/다음 튜토리얼로 이동할 수 있는 네비게이션이 자동으로 생성됩니다
-- **용어 자동 변환**: 마크다운 콘텐츠에서 특정 한글 용어가 자동으로 "한글(영문)" 형식으로 변환됩니다 (예: "변수" → "변수(variable)")
-  - 용어 사전은 `lib/terms.ts` 파일에서 관리합니다
-  - 코드 블록, 이미지, 링크 내부의 용어는 변환되지 않습니다
 
 ## 주요 기능
 
-- ✅ **MD 파일 기반 콘텐츠 관리** - `content/docs/` 폴더에 MD 파일만 추가하면 자동 반영
-- ✅ **자동 튜토리얼 목록 생성** - 파일명 순서대로 자동 정렬 및 표시
-- ✅ **코드 하이라이팅** - C# 코드 구문 강조 표시
-- ✅ **다크 모드 지원** - 시스템 설정에 따른 자동 다크 모드
-- ✅ **GitHub Flavored Markdown 지원** - 테이블, 체크박스 등 GFM 기능 지원
-- ✅ **정적 사이트 생성 (SSG)** - 빌드 시 모든 페이지 미리 생성
-- ✅ **이전/다음 네비게이션** - 튜토리얼 간 쉬운 이동
-- ✅ **반응형 디자인** - 모바일, 태블릿, 데스크톱 지원
-- ✅ **다크 그레이 모던 테마** - 깔끔하고 읽기 쉬운 UI
-- ✅ **SEO 최적화** - 메타데이터, 구조화된 데이터, 사이트맵 자동 생성
+- **MD 파일 기반 콘텐츠 관리** - `content/docs/` 폴더에 MD 파일만 추가하면 자동 반영
+- **다국어 지원 (한국어/영어)** - 언어 전환 가능, `.en.md` 영문 파일 지원
+- **자동 튜토리얼 목록 생성** - 파일명 순서대로 자동 정렬 및 표시
+- **코드 하이라이팅** - C# 코드 구문 강조 표시
+- **다크 모드 지원** - 시스템 설정에 따른 자동 다크 모드
+- **GitHub Flavored Markdown 지원** - 테이블, 체크박스 등 GFM 기능 지원
+- **정적 사이트 생성 (SSG)** - 빌드 시 모든 페이지 미리 생성
+- **이전/다음 네비게이션** - 튜토리얼 간 쉬운 이동
+- **반응형 디자인** - 모바일, 태블릿, 데스크톱 지원
+- **용어 자동 변환** - 한글 용어를 "한글(영문)" 형식으로 자동 변환
+- **캐싱 시스템** - 튜토리얼 데이터 캐싱으로 성능 최적화
+- **SEO 최적화** - 메타데이터, 구조화된 데이터, 사이트맵 자동 생성
 
-## 디자인 특징
+## 특수 기능
 
-- **모던한 블루/그레이 테마**: 부드러운 그라데이션 배경과 블루 액센트 컬러
-- **심플한 리스트 UI**: 깔끔한 카드 디자인과 호버 효과
-- **반투명 효과**: backdrop-blur를 활용한 모던한 글래스모피즘 스타일
-- **읽기 최적화**: 적절한 폰트 크기와 줄 간격으로 가독성 향상
+### 용어 자동 변환
+
+마크다운 콘텐츠에서 특정 한글 용어가 자동으로 "한글(영문)" 형식으로 변환됩니다.
+
+- 예: "변수" → "변수(variable)"
+- 용어 사전은 `lib/terms.ts` 파일에서 관리합니다
+- 코드 블록, 이미지, 링크 내부의 용어는 변환되지 않습니다
+
+### 다국어 지원
+
+- 언어 전환 버튼으로 한국어/영어 전환 가능
+- 각 튜토리얼에 `.en.md` 영문 버전 제공
+- 쿠키를 통한 언어 설정 유지
 
 ## 개발
 
@@ -207,8 +255,6 @@ npm start
 
 ## SEO 최적화
 
-이 프로젝트는 검색 엔진 최적화(SEO)를 위해 다음과 같은 기능을 포함하고 있습니다:
-
 ### 메타데이터
 
 - **기본 메타데이터**: 각 페이지에 적절한 title, description, keywords 설정
@@ -222,29 +268,12 @@ npm start
 - **Course 스키마**: 각 튜토리얼을 교육 과정으로 표시 (GEO 최적화)
 - **BreadcrumbList**: 페이지 계층 구조를 검색 엔진에 명확히 전달
 - **WebSite 스키마**: 홈페이지에 웹사이트 정보 포함
-- **CollectionPage**: 튜토리얼 목록 페이지에 컬렉션 정보 포함
 - **학습 경로 정보**: 선수과목(coursePrerequisites) 정보 포함
 
 ### 사이트맵 및 Robots.txt
 
 - **자동 사이트맵 생성**: `app/sitemap.ts`를 통해 모든 페이지 자동 포함
 - **Robots.txt**: `app/robots.ts`를 통해 검색 엔진 크롤링 규칙 설정
-
-### 시맨틱 HTML
-
-- **의미 있는 HTML 태그**: `<article>`, `<nav>`, `<header>`, `<section>` 등 적절한 시맨틱 태그 사용
-- **ARIA 속성**: 접근성을 위한 ARIA 레이블 및 속성 추가
-- **rel 속성**: 이전/다음 링크에 `rel="prev"`, `rel="next"` 속성 추가
-
-### GEO (Generative Engine Optimization)
-
-이 프로젝트는 AI 검색 엔진(예: ChatGPT, Perplexity, Google AI Overview)을 위한 GEO 최적화를 포함하고 있습니다:
-
-- **Course 스키마**: 튜토리얼을 교육 과정으로 구조화하여 AI가 학습 경로를 이해할 수 있도록 함
-- **학습 목표 명시**: 각 튜토리얼의 목표와 학습 내용을 명확히 정의
-- **선수과목 정보**: 이전 튜토리얼과의 연결 관계를 구조화된 데이터로 제공
-- **교육 수준 표시**: Beginner, Intermediate, Advanced 등 교육 수준 명시
-- **명확한 설명**: AI가 이해하기 쉬운 구조화된 설명과 메타데이터
 
 ### 환경 변수 설정
 
@@ -253,8 +282,6 @@ npm start
 ```env
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
-
-이 URL은 메타데이터, 사이트맵, 구조화된 데이터에서 사용됩니다.
 
 ## 라이선스
 

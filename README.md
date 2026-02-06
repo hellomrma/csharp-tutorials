@@ -1,6 +1,13 @@
 # 유니티 C# 튜토리얼
 
+[![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5.4-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.7-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/license-Private-red?style=flat)](LICENSE)
+
 Unity와 C# 프로그래밍을 학습할 수 있는 Next.js 기반 웹사이트입니다. 마크다운 파일을 기반으로 한 간단하고 모던한 튜토리얼 플랫폼입니다.
+
+**🌐 라이브 데모**: [https://csharp-tutorials.vercel.app](https://csharp-tutorials.vercel.app)
 
 ## 시작하기
 
@@ -253,6 +260,56 @@ npm start
 
 개발 서버는 [http://localhost:3000](http://localhost:3000)에서 실행됩니다.
 
+## 배포
+
+### Vercel 배포 (권장)
+
+이 프로젝트는 Vercel에 최적화되어 있습니다.
+
+1. **Vercel에 배포하기**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/csharp-tutorials)
+
+또는 Vercel CLI 사용:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+2. **환경 변수 설정**
+
+Vercel 프로젝트 설정 → Environment Variables에서 다음을 추가:
+
+```
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+```
+
+3. **자동 배포**
+
+- `main` 브랜치에 push하면 프로덕션 자동 배포
+- PR 생성 시 프리뷰 배포 자동 생성
+
+### 기타 플랫폼 배포
+
+**Netlify**:
+```bash
+npm run build
+```
+빌드 디렉토리: `.next`
+
+**Docker**:
+```dockerfile
+# Dockerfile 예시
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+CMD ["npm", "start"]
+```
+
 ## SEO 최적화
 
 ### 메타데이터
@@ -280,9 +337,39 @@ npm start
 프로덕션 환경에서는 `.env.local` 파일에 다음 변수를 설정하세요:
 
 ```env
+# 사이트 URL (SEO 및 메타데이터에 사용)
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
+
+# Google Analytics 측정 ID (선택 사항, 현재는 layout.tsx에 하드코딩됨)
+# NEXT_PUBLIC_GA_ID=G-YOUR-GA-ID
 ```
+
+**참고**:
+- 현재 Google Analytics ID (`G-91EN6ZPDC2`)는 `app/layout.tsx`에 직접 설정되어 있습니다.
+- Vercel에 배포할 때는 프로젝트 설정에서 환경 변수를 설정하세요.
+
+## 기여하기
+
+프로젝트에 기여하고 싶으시다면 [CONTRIBUTING.md](CONTRIBUTING.md)를 참조하세요.
+
+간단한 기여 방법:
+1. 이 저장소를 Fork합니다
+2. 새 브랜치를 생성합니다 (`git checkout -b feature/amazing-feature`)
+3. 변경사항을 커밋합니다 (`git commit -m 'Add amazing feature'`)
+4. 브랜치에 Push합니다 (`git push origin feature/amazing-feature`)
+5. Pull Request를 생성합니다
+
+### 버그 리포트 및 기능 제안
+
+- 버그를 발견하셨나요? [Issue](https://github.com/yourusername/csharp-tutorials/issues)를 생성해주세요
+- 새로운 기능 제안? [Discussions](https://github.com/yourusername/csharp-tutorials/discussions)에서 논의해주세요
 
 ## 라이선스
 
 이 프로젝트는 개인 학습 목적으로 제작되었습니다.
+
+## 감사의 말
+
+- Unity 공식 문서
+- Next.js 팀
+- 오픈소스 커뮤니티

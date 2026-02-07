@@ -70,7 +70,7 @@ csharp-tutorials/
 │   ├── error.tsx                 # 에러 페이지
 │   └── not-found.tsx             # 404 페이지
 ├── content/                      # 마크다운 콘텐츠 파일
-│   ├── docs/                     # 튜토리얼 MD 파일들 (총 45개, 각각 영문 버전 포함)
+│   ├── docs/                     # 튜토리얼 MD 파일들 (총 46개, 각각 영문 버전 포함)
 │   │   ├── 01-변수와-조건문-기초.md
 │   │   ├── 01-변수와-조건문-기초.en.md
 │   │   ├── ...
@@ -92,7 +92,7 @@ csharp-tutorials/
 └── tsconfig.json                 # TypeScript 설정
 ```
 
-## 튜토리얼 목록 (총 45개)
+## 튜토리얼 목록 (총 46개)
 
 ### Unity C# 기초 (1~26)
 
@@ -131,7 +131,7 @@ csharp-tutorials/
 30. Rect Transform
 31. Unity 내장 함수 정리
 
-### Unity C# 고급 (32~45)
+### Unity C# 고급 (32~46)
 
 32. GameObject 찾기와 컴포넌트 가져오기
 33. 오브젝트 생성과 삭제
@@ -147,6 +147,7 @@ csharp-tutorials/
 43. 씬 관리 (SceneManager)
 44. 2D 플랫포머 게임 기초
 45. 밤송이 던지기 게임
+46. 사과 받기 게임
 
 ## MD 파일 관리
 

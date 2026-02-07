@@ -9,7 +9,7 @@ Unity와 C# 프로그래밍을 학습할 수 있는 Next.js 14 기반 튜토리�
 - **프레임워크**: Next.js 14 (App Router)
 - **언어**: TypeScript
 - **스타일링**: Tailwind CSS
-- **콘텐츠**: Markdown 파일 기반 (45개 튜토리얼, 한국어/영어)
+- **콘텐츠**: Markdown 파일 기반 (46개 튜토리얼, 한국어/영어)
 - **분석**: Google Analytics (GA4)
 - **배포**: Vercel
 

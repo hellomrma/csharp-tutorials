@@ -9,7 +9,9 @@ Unity와 C# 프로그래밍을 학습할 수 있는 Next.js 14 기반 튜토리�
 - **프레임워크**: Next.js 14 (App Router)
 - **언어**: TypeScript
 - **스타일링**: Tailwind CSS
-- **콘텐츠**: Markdown 파일 기반 (43개 튜토리얼, 한국어/영어)
+- **콘텐츠**: Markdown 파일 기반 (45개 튜토리얼, 한국어/영어)
+- **분석**: Google Analytics (GA4)
+- **배포**: Vercel
 
 ## 핵심 명령어
 
@@ -48,12 +50,26 @@ content/sources/        # 예제 소스 코드
 lib/                    # 유틸리티 함수
 ├── markdown.ts         # MD 파싱 및 HTML 변환
 ├── i18n.ts             # 다국어 설정
-├── cache.ts            # 캐싱 시스템
+├── cache.ts            # 캐싱 시스템 (메모리 캐시)
 ├── terms.ts            # 용어 자동 변환
-├── seo.ts              # SEO 유틸리티
+├── seo.ts              # SEO 유틸리티 (JSON-LD 생성)
 ├── tags.ts             # 태그 관리
-└── cookies.ts          # 쿠키 관리
+└── cookies.ts          # 쿠키 관리 (언어 설정)
 ```
+
+## 환경 변수
+
+프로젝트에서 사용하는 환경 변수입니다. `.env.local` 파일에 설정하세요.
+
+```bash
+# 사이트 URL (SEO 및 메타데이터에 사용)
+NEXT_PUBLIC_SITE_URL=https://csharp-tutorials.vercel.app
+
+# Google Analytics 측정 ID (이미 layout.tsx에 하드코딩됨)
+# NEXT_PUBLIC_GA_ID=G-91EN6ZPDC2
+```
+
+**참고**: 현재 Google Analytics ID (`G-91EN6ZPDC2`)는 `app/layout.tsx`에 직접 설정되어 있습니다. 환경 변수로 분리하려면 layout.tsx를 수정하세요.
 
 ## 주요 아키텍처
 
@@ -128,10 +144,33 @@ slugEn: "01-variables-and-conditionals"
 |------|------|
 | `lib/markdown.ts` | 튜토리얼 데이터 로딩 및 파싱 |
 | `lib/i18n.ts` | 다국어 번역 문자열 |
-| `lib/terms.ts` | 용어 자동 변환 사전 |
-| `lib/cache.ts` | 튜토리얼 캐싱 로직 |
-| `app/layout.tsx` | 루트 레이아웃 및 메타데이터 |
+| `lib/terms.ts` | 용어 자동 변환 사전 (변수→변수(variable)) |
+| `lib/cache.ts` | 튜토리얼 캐싱 로직 (메모리 캐시) |
+| `lib/seo.ts` | SEO JSON-LD 스키마 생성 유틸리티 |
+| `app/layout.tsx` | 루트 레이아웃, 메타데이터, GA 설정 |
 | `app/page.tsx` | 홈페이지 (튜토리얼 목록) |
+
+## 주요 컴포넌트
+
+| 컴포넌트 | 타입 | 설명 |
+|---------|------|------|
+| `Header.tsx` | 클라이언트 | 네비게이션 바, 언어 전환 버튼 포함 |
+| `Footer.tsx` | 서버 | 푸터 섹션 |
+| `LanguageProvider.tsx` | 클라이언트 | Context API로 언어 상태 관리 |
+| `LanguageSwitcher.tsx` | 클라이언트 | 언어 전환 UI 버튼 |
+| `MainPageContent.tsx` | 클라이언트 | 홈페이지 튜토리얼 목록 렌더링 |
+| `TagSidebar.tsx` | 클라이언트 | 카테고리/태그 필터링 사이드바 |
+| `TutorialPageContent.tsx` | 클라이언트 | 튜토리얼 상세 콘텐츠 표시 |
+
+## 캐싱 시스템
+
+`lib/cache.ts`는 메모리 기반 캐싱 시스템을 제공합니다:
+
+- **프로덕션**: 무제한 캐싱 (한 번 로드하면 메모리에 유지)
+- **개발**: 5분 TTL (hot reload 지원)
+- **캐싱 대상**: `getAllTutorials()`, `getTutorialBySlug()`, `getAllTutorialSlugs()`
+- **성능 향상**: 반복적인 파일 읽기 및 마크다운 파싱 방지
+- **빌드 최적화**: 정적 생성 시 빌드 속도 크게 향상
 
 ## 새 튜토리얼 추가
 
@@ -152,9 +191,46 @@ slugEn: "01-variables-and-conditionals"
 
 주요 패키지:
 
-- `next`: ^14.2.5
+- `next`: ^14.2.5 (App Router)
 - `react`: ^18.3.1
-- `gray-matter`: frontmatter 파싱
-- `remark`, `rehype`: Markdown 처리
-- `rehype-highlight`: 코드 하이라이팅
-- `tailwindcss`: CSS 프레임워크
+- `typescript`: ^5.5.4
+- `gray-matter`: ^4.0.3 (frontmatter 파싱)
+- `remark`, `rehype`: Markdown 처리 파이프라인
+- `rehype-highlight`: ^7.0.2 (코드 하이라이팅)
+- `tailwindcss`: ^3.4.7 (CSS 프레임워크)
+- `highlight.js`: ^11.11.1 (구문 강조)
+
+## 분석 및 모니터링
+
+### Google Analytics
+
+- **측정 ID**: `G-91EN6ZPDC2`
+- **위치**: `app/layout.tsx`
+- **추적 항목**: 페이지뷰, 사용자 행동
+- **설정**: `gtag.js` 라이브러리 사용
+
+## 개선 사항 추적
+
+프로젝트의 진행 중인 개선 사항 및 완료된 작업은 `IMPROVEMENTS.md` 파일을 참조하세요.
+
+주요 완료 항목:
+- ✅ Sitemap 다국어 지원
+- ✅ 타입 안정성 개선
+- ✅ SEO 메타데이터 개선
+- ✅ 에러 처리 개선 (error.tsx, not-found.tsx)
+- ✅ 성능 최적화 (캐싱 시스템)
+- ✅ 코드 중복 제거 (lib/seo.ts 유틸리티)
+
+## 문제 해결
+
+### 빌드 오류
+- 파일명 인코딩 문제: UTF-8 인코딩 확인
+- 마크다운 파싱 오류: frontmatter 형식 검증
+
+### 개발 서버 오류
+- 포트 충돌: `lsof -ti:3000 | xargs kill -9`
+- 캐시 문제: `.next` 디렉토리 삭제 후 재시작
+
+### 배포 문제
+- 환경 변수 누락: Vercel에서 `NEXT_PUBLIC_SITE_URL` 설정 확인
+- 빌드 시간 초과: 캐싱 시스템이 제대로 작동하는지 확인

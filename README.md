@@ -123,28 +123,28 @@ csharp-tutorials/
 25. Random 함수
 26. ToString 메서드
 
-### Unity C# 응용 (27~31)
+### Unity C# 응용 (27~43)
 
 27. 룰렛 회전 제어
 28. 마우스 드래그로 자동차 제어
 29. 로컬 좌표계와 월드 좌표계
 30. Rect Transform
 31. Unity 내장 함수 정리
-
-### Unity C# 고급 (32~46)
-
 32. GameObject 찾기와 컴포넌트 가져오기
 33. 오브젝트 생성과 삭제
 34. 2D 충돌 감지
 35. 코루틴 (Coroutine)
 36. 싱글톤 패턴
 37. Rigidbody2D와 Collider2D
-38. 화살 피하기 게임 구현
 39. 원-원 충돌 감지 알고리즘
 40. 정적 변수 (static)
 41. Mathf 고급 함수와 부동소수점 오차
 42. Unity 속성 (Attributes)
 43. 씬 관리 (SceneManager)
+
+### 실전 프로젝트 (38, 44~46)
+
+38. 화살 피하기 게임 구현
 44. 2D 플랫포머 게임 기초
 45. 밤송이 던지기 게임
 46. 사과 받기 게임

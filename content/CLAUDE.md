@@ -61,6 +61,5 @@ slugEn: "01-variables-and-conditionals"
 
 ## 예제 소스 코드 (content/sources/)
 
-- `BamsongiController.cs` - 밤송이(투사체) 컨트롤러
-- `BamsongiGenerator.cs` - 밤송이 생성기
-- `TargetController.cs` - 타겟 좌우 이동
+- **밤송이 던지기**: `BamsongiController.cs`, `BamsongiGenerator.cs`, `TargetController.cs`
+- **공룡 달리기 (Dino Run 2D)**: `Assets/02.Scripts/DinoController.cs` (점프·바닥 감지), `Assets/02.Scripts/Scroll.cs` (땅/구름 스크롤)

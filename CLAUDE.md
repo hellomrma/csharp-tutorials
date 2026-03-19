@@ -1,94 +1,87 @@
-# CLAUDE.md - 프로젝트 컨텍스트
+# CLAUDE.md
 
-Unity와 C# 프로그래밍을 학습할 수 있는 Next.js 14 기반 튜토리얼 웹사이트입니다.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-- **프레임워크**: Next.js 14 (App Router)
-- **언어**: TypeScript
-- **스타일링**: Tailwind CSS
-- **콘텐츠**: Markdown 파일 기반 (47개 튜토리얼, 한국어/영어)
-- **분석**: Google Analytics (GA4)
-- **배포**: Vercel
+## Project Overview
 
-## 핵심 명령어
+A Next.js 14 (App Router) tutorial website for learning Unity and C# programming. Content is managed via Markdown files and served as a statically generated bilingual (Korean/English) site.
 
-```bash
-npm run dev      # 개발 서버 실행
-npm run build    # 빌드
-npm start        # 프로덕션 실행
-npm run lint     # 린트 검사
-```
+Live: https://csharp-tutorials.vercel.app
 
-## 디렉토리 구조
-
-```
-app/                    # Next.js App Router (→ app/CLAUDE.md)
-├── components/         # React 컴포넌트
-├── tutorials/[...slug]/ # 동적 튜토리얼 라우트
-├── layout.tsx          # 루트 레이아웃
-└── page.tsx            # 홈페이지
-
-content/                # 콘텐츠 (→ content/CLAUDE.md)
-├── docs/               # 튜토리얼 마크다운 파일
-└── sources/            # 예제 소스 코드
-
-lib/                    # 유틸리티 함수 (→ lib/CLAUDE.md)
-```
-
-## 환경 변수
-
-`.env.local` 파일에 설정:
+## Commands
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://csharp-tutorials.vercel.app
+npm run dev      # Start development server at http://localhost:3000
+npm run build    # Production build (SSG)
+npm start        # Run production build locally
+npm run lint     # ESLint check
 ```
 
-**참고**: Google Analytics ID (`G-91EN6ZPDC2`)는 `app/layout.tsx`에 직접 설정되어 있습니다.
+There are no tests. If the dev server port conflicts: `lsof -ti:3000 | xargs kill -9`. To clear Next.js cache: delete `.next/` and restart.
 
-## 코딩 컨벤션
+## Architecture
 
-### TypeScript
-- 타입 정의는 명시적으로 작성
-- `interface` 사용 권장 (객체 타입)
-- 유틸리티 함수는 `lib/` 디렉토리에 배치
+### Content Pipeline
 
-### 파일 명명
-- 컴포넌트: PascalCase (`Header.tsx`)
-- 유틸리티: camelCase (`markdown.ts`)
-- 튜토리얼: `XX-제목.md` 형식 (XX는 숫자)
+Markdown files in `content/docs/` are the source of truth. The pipeline:
+1. `lib/markdown.ts` reads `.md` files via `fs`, parses frontmatter with `gray-matter`
+2. Converts Markdown → HTML via `remark` → `remark-rehype` → `rehype-highlight` → `rehype-stringify`
+3. Post-processes HTML: removes duplicate `<h1>`, converts Korean terms (e.g. "변수" → "변수(variable)") via `lib/terms.ts`
+4. Results are cached in a module-level `MemoryCache` (`lib/cache.ts`): 5min TTL in dev, unlimited in production
 
-### CSS
-- Tailwind CSS 유틸리티 클래스 사용
-- 글로벌 스타일은 `app/globals.css`
+### Bilingual (i18n) System
 
-## 의존성
+- Two locales: `ko` (default) and `en`
+- **Locale is read server-side from a cookie** (`lib/cookies.ts`) — not from the URL
+- Korean tutorials: `content/docs/XX-제목.md`
+- English translations: `content/docs/XX-제목.en.md` (same base name + `.en.md`)
+- Frontmatter fields for bilingual support: `title`/`titleEn`, `category`/`categoryEn`, `description`/`descriptionEn`, `slugEn`
+- UI strings live in `lib/i18n.ts` (`translations.ko` and `translations.en`)
+- `LanguageProvider.tsx` manages locale state client-side via React Context; `LanguageSwitcher.tsx` triggers cookie writes
 
-주요 패키지:
+### Routing
 
-- `next`: ^14.2.5 (App Router)
-- `react`: ^18.3.1
-- `typescript`: ^5.5.4
-- `gray-matter`: ^4.0.3 (frontmatter 파싱)
-- `remark`, `rehype`: Markdown 처리 파이프라인
-- `rehype-highlight`: ^7.0.2 (코드 하이라이팅)
-- `tailwindcss`: ^3.4.7 (CSS 프레임워크)
-- `highlight.js`: ^11.11.1 (구문 강조)
+- Home: `/`
+- Tutorial detail: `/tutorials/docs/[slug]` (catch-all `[...slug]`)
+- Korean URL example: `/tutorials/docs/01-변수와-조건문-기초`
+- English URL example: `/tutorials/docs/01-variables-and-conditionals` (uses `slugEn` frontmatter)
+- All routes are statically generated via `generateStaticParams()` in `app/tutorials/[...slug]/page.tsx`
 
-## 문제 해결
+### Component Architecture
 
-### 빌드 오류
-- 파일명 인코딩 문제: UTF-8 인코딩 확인
-- 마크다운 파싱 오류: frontmatter 형식 검증
+Server Components by default (App Router). Client components are explicitly marked with `'use client'`:
+- `LanguageProvider`, `LanguageSwitcher`, `Header`, `MainPageContent`, `TagSidebar`, `TutorialPageContent` — all client components
+- `Footer` — server component
 
-### 개발 서버 오류
-- 포트 충돌: `lsof -ti:3000 | xargs kill -9`
-- 캐시 문제: `.next` 디렉토리 삭제 후 재시작
+### File Naming Conventions
 
-### 배포 문제
-- 환경 변수 누락: Vercel에서 `NEXT_PUBLIC_SITE_URL` 설정 확인
-- 빌드 시간 초과: 캐싱 시스템이 제대로 작동하는지 확인
+- Tutorial files: `XX-제목.md` (XX = numeric order prefix like `01`, `02`)
+- Components: PascalCase (`Header.tsx`)
+- Utilities: camelCase (`markdown.ts`)
 
-## 개선 사항 추적
+## Adding Content
 
-`IMPROVEMENTS.md` 파일 참조. 주요 완료 항목:
-- Sitemap 다국어 지원, 타입 안정성 개선, SEO 메타데이터 개선
-- 에러 처리 개선, 성능 최적화 (캐싱), 코드 중복 제거
+Add a `.md` file to `content/docs/` — it will auto-appear on the home page, sorted by the numeric prefix. Required frontmatter:
+
+```markdown
+---
+title: "제목"
+titleEn: "English Title"
+category: "기초"
+categoryEn: "Basics"
+order: 1
+description: "설명"
+descriptionEn: "English description"
+slugEn: "01-english-slug"
+---
+```
+
+For an English translation, create a companion file with the same base name + `.en.md`.
+
+## Environment Variables
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://csharp-tutorials.vercel.app  # Used for SEO/sitemap
+```
+
+Google Analytics ID (`G-91EN6ZPDC2`) is hardcoded in `app/layout.tsx`.

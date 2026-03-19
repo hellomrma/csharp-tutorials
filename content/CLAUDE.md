@@ -40,7 +40,7 @@ slugEn: "01-variables-and-conditionals"
 |----------|-------------------|-----------------|------|
 | 기초 | Unity C# 기초 | Unity C# Basics | 01-26 |
 | 응용 | Unity C# 응용 | Unity C# Application | 27-37, 39-43 |
-| 실전 | 실전 | Practice | 38, 44-46 |
+| 실전 | 실전 | Practice | 38, 44-50 |
 
 ## 새 튜토리얼 추가
 
@@ -61,5 +61,5 @@ slugEn: "01-variables-and-conditionals"
 
 ## 예제 소스 코드 (content/sources/)
 
-- **밤송이 던지기**: `BamsongiController.cs`, `BamsongiGenerator.cs`, `TargetController.cs`
-- **공룡 달리기 (Dino Run 2D)**: `Assets/02.Scripts/DinoController.cs` (점프·바닥 감지), `Assets/02.Scripts/Scroll.cs` (땅/구름 스크롤)
+- **공룡 달리기 2D** (`unity-dinorun2d/`): `DinoController.cs` (점프·바닥 감지·숙이기), `GameManager.cs` (싱글톤·스폰·점수·게임오버), `ObstacleController.cs` (이동·OnBecameInvisible), `Scroll.cs` (땅 텍스처 오프셋·구름 이동) → 튜토리얼 47, 48
+- **공룡 달리기 3D** (`unity-dinorun3d/`): `DinoController.cs` (Z 자동 전진·X 좌우 이동), `DinoFollowCamera.cs` (LateUpdate 카메라 추적), `DinoCounter.cs` (childCount UI), `DinoPositionController.cs` (삼각함수 원형 배치), `Map.cs` + `MapManager.cs` (절차적 맵 생성) → 튜토리얼 49, 50

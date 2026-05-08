@@ -13,10 +13,10 @@ export default function MainPageContent({ tutorials }: MainPageContentProps) {
 
   // 카테고리별로 튜토리얼 그룹화
   const tutorialsByCategory = tutorials.reduce((acc, tutorial) => {
-    const category = locale === 'en' && tutorial.categoryEn 
-      ? tutorial.categoryEn 
+    const category = locale === 'en' && tutorial.categoryEn
+      ? tutorial.categoryEn
       : (tutorial.category || 'Unity C# 기초');
-    
+
     if (!acc[category]) {
       acc[category] = [];
     }
@@ -24,10 +24,20 @@ export default function MainPageContent({ tutorials }: MainPageContentProps) {
     return acc;
   }, {} as Record<string, typeof tutorials>);
 
-  // 카테고리 순서 정의 (기초가 먼저, 그 다음 응용)
-  const categoryOrder = locale === 'en' 
-    ? ['Unity C# Basics', 'Unity C# Applications']
-    : ['Unity C# 기초', 'Unity C# 응용'];
+  // 카테고리 순서 정의 (기초 → 응용 → 실전)
+  const categoryOrder = locale === 'en'
+    ? ['Unity C# Basics', 'Unity C# Application', 'Practice']
+    : ['Unity C# 기초', 'Unity C# 응용', '실전'];
+
+  // 카테고리 키커 라벨 (영문, 트래킹 와이드)
+  const kickerByCategory: Record<string, string> = {
+    'Unity C# 기초': 'Basics',
+    'Unity C# 응용': 'Application',
+    '실전': 'Practice',
+    'Unity C# Basics': 'Basics',
+    'Unity C# Application': 'Application',
+    'Practice': 'Practice',
+  };
 
   // 정의된 순서대로 정렬하고, 없는 카테고리는 뒤에 추가
   const sortedCategories = [
@@ -36,8 +46,9 @@ export default function MainPageContent({ tutorials }: MainPageContentProps) {
   ];
 
   return (
-    <div className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
+    <div className="container">
       <div className="main-header">
+        <p className="kicker main-kicker">Unity C# Tutorials</p>
         <h1 className="main-title">
           <span className="main-title-main">C#</span>
           <span className="main-title-sub">{t.mainTitle}</span>
@@ -57,60 +68,42 @@ export default function MainPageContent({ tutorials }: MainPageContentProps) {
             const categoryTutorials = tutorialsByCategory[category];
             if (!categoryTutorials || categoryTutorials.length === 0) return null;
 
+            const kickerLabel = kickerByCategory[category] || 'Section';
+
             return (
-              <section 
-                key={category} 
-                className="tutorial-category-section"
-                style={{ marginBottom: '3rem' }}
-              >
-                <h2 
-                  className="category-title"
-                  style={{
-                    fontSize: '1.5rem',
-                    fontWeight: '600',
-                    marginBottom: '1.5rem',
-                    color: 'var(--slate-100)',
-                    paddingBottom: '0.75rem',
-                    borderBottom: '2px solid var(--slate-700)'
-                  }}
-                >
-                  {category}
-                </h2>
-                <div className="tutorial-list" aria-label={`${category} ${t.tutorialList}`}>
+              <section key={category} className="tutorial-category-section">
+                <p className="kicker category-kicker">{kickerLabel}</p>
+                <h2 className="category-title">{category}</h2>
+                <ul className="tutorial-list" aria-label={`${category} ${t.tutorialList}`}>
                   {categoryTutorials.map((tutorial, index) => {
-                    // 언어에 따라 타이틀 선택
                     const displayTitle = locale === 'en' && tutorial.titleEn ? tutorial.titleEn : tutorial.title;
-                    // 언어에 따라 slug 선택
                     const displaySlug = locale === 'en' && tutorial.slugEn ? tutorial.slugEn : tutorial.slug;
-                    
+                    const orderLabel = String(tutorial.order ?? index + 1).padStart(2, '0');
+
                     return (
-                      <Link
-                        key={tutorial.slug}
-                        href={`/tutorials/${displaySlug}`}
-                        className="tutorial-item"
-                        aria-label={`${displayTitle} ${t.tutorialList}`}
-                      >
-                        <span className="tutorial-number" aria-hidden="true">
-                          {String(tutorial.order ?? index + 1).padStart(2, '0')}
-                        </span>
-                        <div style={{ flex: 1, minWidth: 0 }}>
+                      <li key={tutorial.slug}>
+                        <Link
+                          href={`/tutorials/${displaySlug}`}
+                          className="tutorial-item"
+                          aria-label={`${displayTitle} ${t.tutorialList}`}
+                        >
+                          <span className="tutorial-number" aria-hidden="true">
+                            № {orderLabel}
+                          </span>
                           <h3 className="tutorial-title">
                             <span className="tutorial-title-kr">{displayTitle}</span>
                             {locale === 'ko' && tutorial.titleEn && (
-                              <span className="tutorial-title-en">({tutorial.titleEn})</span>
+                              <span className="tutorial-title-en">{tutorial.titleEn}</span>
                             )}
                             {locale === 'en' && tutorial.title && tutorial.title !== tutorial.titleEn && (
-                              <span className="tutorial-title-en">({tutorial.title})</span>
+                              <span className="tutorial-title-en">{tutorial.title}</span>
                             )}
                           </h3>
-                        </div>
-                        <svg className="tutorial-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
+                        </Link>
+                      </li>
                     );
                   })}
-                </div>
+                </ul>
               </section>
             );
           })}
@@ -127,4 +120,3 @@ export default function MainPageContent({ tutorials }: MainPageContentProps) {
     </div>
   );
 }
-

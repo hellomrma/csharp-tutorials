@@ -1,16 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { LanguageProvider } from "./components/LanguageProvider";
 
-const inter = Inter({ subsets: ["latin"] });
-
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://csharp-tutorials.vercel.app';
 const siteName = '유니티 C# 튜토리얼';
 const defaultDescription = 'Unity와 C# 프로그래밍을 체계적으로 학습할 수 있는 온라인 튜토리얼 웹사이트입니다. 실전 예제와 상세한 설명으로 Unity C# 기초부터 고급까지 마스터하세요.';
+
+const NO_FLASH_SCRIPT = `
+(function () {
+  try {
+    var m = localStorage.getItem('theme') || 'light';
+    var dark =
+      m === 'dark' ||
+      (m === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (dark) document.documentElement.classList.add('dark');
+  } catch (e) {}
+})();
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -82,8 +91,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className={inter.className}>
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+      </head>
+      <body>
         {/* Google tag (gtag.js) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-91EN6ZPDC2"
@@ -106,4 +122,3 @@ export default function RootLayout({
     </html>
   );
 }
-

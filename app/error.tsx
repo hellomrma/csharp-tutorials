@@ -9,13 +9,13 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // 에러를 로깅 서비스로 전송할 수 있습니다
     console.error('Application error:', error);
   }, [error]);
 
   return (
     <div className="error-container">
       <div className="error-content">
+        <p className="kicker error-kicker">Error</p>
         <h1 className="error-title">문제가 발생했습니다</h1>
         <p className="error-description">
           페이지를 로드하는 중 오류가 발생했습니다.
@@ -28,10 +28,11 @@ export default function Error({ error, reset }: ErrorProps) {
         )}
         <div className="error-actions">
           <button
+            type="button"
             onClick={reset}
-            className="error-button error-button-primary"
+            className="error-button"
           >
-            다시 시도
+            다시 시도 →
           </button>
           <a href="/" className="error-button error-button-secondary">
             홈으로 돌아가기

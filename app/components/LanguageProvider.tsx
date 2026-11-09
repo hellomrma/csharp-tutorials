@@ -37,6 +37,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // 하이드레이션 불일치 방지를 위한 의도된 마운트 감지
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -48,7 +50,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // 항상 Provider를 제공하되, mounted 전에는 기본 locale 사용
   const currentLocale = mounted ? locale : defaultLocale;
-  
+
+  useEffect(() => {
+    document.documentElement.lang = currentLocale;
+  }, [currentLocale]);
+
   // translations와 value 객체를 메모이제이션하여 무한 루프 방지
   const translations = useMemo(() => getTranslations(currentLocale), [currentLocale]);
   

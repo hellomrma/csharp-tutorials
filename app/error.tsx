@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -34,9 +35,9 @@ export default function Error({ error, reset }: ErrorProps) {
           >
             다시 시도 →
           </button>
-          <a href="/" className="error-button error-button-secondary">
+          <Link href="/" className="error-button error-button-secondary">
             홈으로 돌아가기
-          </a>
+          </Link>
         </div>
       </div>
     </div>

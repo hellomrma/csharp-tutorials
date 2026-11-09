@@ -88,7 +88,6 @@ function getTutorialsFromDirectory(directory: string, basePath: string = '', loc
 
       return {
         slug: finalSlug,
-        slugEn: basePath ? `${basePath}/${slugEn}` : slugEn,
         title: displayTitle,
         titleEn: data.titleEn,
         order: data.order || orderFromFilename,
@@ -97,6 +96,8 @@ function getTutorialsFromDirectory(directory: string, basePath: string = '', loc
         description: data.description,
         descriptionEn: data.descriptionEn,
         ...data,
+        // frontmatter의 slugEn(접두사 없음)이 덮어쓰지 않도록 spread 이후에 지정
+        slugEn: basePath ? `${basePath}/${slugEn}` : slugEn,
       };
     });
 }
@@ -129,6 +130,35 @@ export function getAllTutorials(locale: Locale = defaultLocale): TutorialMeta[] 
   tutorialCache.set(cacheKey, sorted);
 
   return sorted;
+}
+
+/**
+ * URL slug로 튜토리얼의 언어별 경로를 찾습니다.
+ * locale은 URL이 영문 slug이면 'en', 한국어 slug이면 'ko'입니다.
+ * 반환되는 경로는 '/tutorials/docs/...' 형식입니다.
+ */
+export function getTutorialAlternates(
+  slug: string
+): { locale: Locale; ko: string; en: string } | null {
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    // 이미 디코딩된 경우 그대로 사용
+  }
+  const normalized = decoded.startsWith('docs/') ? decoded : `docs/${decoded}`;
+
+  for (const t of getAllTutorials('ko')) {
+    const ko = t.slug;
+    const en = t.slugEn || t.slug;
+    if (normalized !== ko && normalized !== en) continue;
+    return {
+      locale: normalized === en && en !== ko ? 'en' : 'ko',
+      ko: `/tutorials/${ko}`,
+      en: `/tutorials/${en}`,
+    };
+  }
+  return null;
 }
 
 /**

@@ -39,7 +39,7 @@ npm start
 
 ## 기술 스택
 
-- **Next.js 14** - React 프레임워크 (App Router)
+- **Next.js 16** - React 프레임워크 (App Router, React 19)
 - **TypeScript** - 타입 안정성
 - **Tailwind CSS** - 유틸리티 기반 CSS 프레임워크
 - **gray-matter** - Frontmatter 파싱

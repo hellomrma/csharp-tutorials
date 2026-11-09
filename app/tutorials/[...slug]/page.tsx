@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getTutorialBySlug, getAllTutorialSlugs, getAllTutorials } from '@/lib/markdown';
-import { getLocale } from '@/lib/cookies';
+import { getTutorialBySlug, getAllTutorialSlugs, getAllTutorials, getTutorialAlternates } from '@/lib/markdown';
+import LocaleSync from '@/app/components/LocaleSync';
 import type { Metadata } from 'next';
 import TutorialPageContent from '@/app/components/TutorialPageContent';
 import TagSidebar from '@/app/components/TagSidebar';
@@ -33,14 +33,16 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
-  const locale = await getLocale();
-  const tutorial = await getTutorialBySlug(slugString, locale);
-  
-  if (!tutorial) {
+  // URL(한국어/영문 slug)이 언어를 결정 (정적 생성을 위해 쿠키는 읽지 않음)
+  const alternates = getTutorialAlternates(slugString);
+  const tutorial = alternates && await getTutorialBySlug(slugString, alternates.locale);
+
+  if (!alternates || !tutorial) {
     return {
-      title: locale === 'en' ? 'Page Not Found' : '페이지를 찾을 수 없습니다',
+      title: '페이지를 찾을 수 없습니다',
     };
   }
+  const locale = alternates.locale;
 
   const title = tutorial.meta.title;
   const seoTitle = locale === 'en' 
@@ -49,7 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = tutorial.meta.description || (locale === 'en'
     ? `${title} - Learn Unity and C# programming systematically.`
     : `${title} - Unity와 C#을 체계적으로 학습할 수 있는 튜토리얼입니다.`);
-  const url = `${siteUrl}/tutorials/${slugString}`;
+  const url = `${siteUrl}${alternates[locale]}`;
   const keywords = tutorial.meta.keywords || ['C#', 'CSharp', '프로그래밍', '튜토리얼', 'Unity', '게임 개발', 'C# 학습'];
 
   return {
@@ -81,6 +83,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     alternates: {
       canonical: url,
+      languages: {
+        ko: alternates.ko,
+        en: alternates.en,
+        'x-default': alternates.ko,
+      },
     },
     other: {
       'article:section': tutorial.meta.category || 'Unity C# 기초',
@@ -92,7 +99,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function TutorialPage({ params }: PageProps) {
   const { slug } = await params;
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
-  const locale = await getLocale();
+  // URL(한국어/영문 slug)이 언어를 결정 (정적 생성을 위해 쿠키는 읽지 않음)
+  const alternates = getTutorialAlternates(slugString);
+  if (!alternates) {
+    notFound();
+  }
+  const locale = alternates.locale;
   const tutorial = await getTutorialBySlug(slugString, locale);
 
   if (!tutorial) {
@@ -153,6 +165,7 @@ export default async function TutorialPage({ params }: PageProps) {
 
   return (
     <div className="detail-page">
+      <LocaleSync locale={locale} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: renderJsonLd(articleJsonLd) }}

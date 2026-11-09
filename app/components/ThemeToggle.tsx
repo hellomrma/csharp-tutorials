@@ -25,6 +25,8 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const saved = (localStorage.getItem('theme') as Mode | null) || 'light';
+    // localStorage는 클라이언트에서만 읽을 수 있어 마운트 후 동기화 (하이드레이션 불일치 방지)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMode(saved);
     setMounted(true);
   }, []);

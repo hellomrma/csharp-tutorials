@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Next.js 14 (App Router) tutorial website for learning Unity and C# programming. Content is managed via Markdown files and served as a statically generated bilingual (Korean/English) site.
+A Next.js 16 (App Router, React 19) tutorial website for learning Unity and C# programming. Content is managed via Markdown files and served as a statically generated bilingual (Korean/English) site.
 
 Live: https://csharp-tutorials.vercel.app
 
@@ -14,7 +14,7 @@ Live: https://csharp-tutorials.vercel.app
 npm run dev      # Start development server at http://localhost:3000
 npm run build    # Production build (SSG)
 npm start        # Run production build locally
-npm run lint     # ESLint check
+npm run lint     # ESLint check (ESLint 9 flat config: eslint.config.mjs)
 ```
 
 There are no tests. If the dev server port conflicts: `lsof -ti:3000 | xargs kill -9`. To clear Next.js cache: delete `.next/` and restart.
@@ -32,12 +32,13 @@ Markdown files in `content/docs/` are the source of truth. The pipeline:
 ### Bilingual (i18n) System
 
 - Two locales: `ko` (default) and `en`
-- **Locale is read server-side from a cookie** (`lib/cookies.ts`) — not from the URL
+- **Tutorial pages: locale is determined by the URL** — Korean slug → `ko`, `slugEn` → `en` (`getTutorialAlternates()` in `lib/markdown.ts`). Pages emit `hreflang` alternates and stay fully static (no cookie reads).
+- **Home page: locale is read server-side from a cookie** (`lib/cookies.ts`), so `/` is dynamically rendered
 - Korean tutorials: `content/docs/XX-제목.md`
 - English translations: `content/docs/XX-제목.en.md` (same base name + `.en.md`)
 - Frontmatter fields for bilingual support: `title`/`titleEn`, `category`/`categoryEn`, `description`/`descriptionEn`, `slugEn`
 - UI strings live in `lib/i18n.ts` (`translations.ko` and `translations.en`)
-- `LanguageProvider.tsx` manages locale state client-side via React Context; `LanguageSwitcher.tsx` triggers cookie writes
+- `LanguageProvider.tsx` manages locale state client-side via React Context; `LanguageSwitcher.tsx` writes the cookie and, on tutorial pages, navigates to the `hreflang` alternate URL; `LocaleSync.tsx` aligns the cookie/context with the URL's locale
 
 ### Routing
 
